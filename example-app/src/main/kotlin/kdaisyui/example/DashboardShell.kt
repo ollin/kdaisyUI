@@ -10,10 +10,10 @@ fun HTML.dashboardShell() {
         meta { charset = "utf-8" }
         title { +"Dashboard" }
         meta { name = "viewport"; content = "width=device-width, initial-scale=1" }
-        link { rel = "stylesheet"; href = "https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" }
-        link { rel = "stylesheet"; href = "https://cdn.jsdelivr.net/npm/daisyui@5/full.css" }
-        link { rel = "stylesheet"; href = "https://cdn.jsdelivr.net/npm/tailwindcss@4" }
-        script { src = "https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js" }
+        link { rel = "stylesheet"; href = "/webjars/daisyui/daisyui.css" }
+        link { rel = "stylesheet"; href = "/webjars/daisyui/themes.css" }
+        script { src = "/webjars/tailwindcss__browser/dist/index.global.js" }
+        script { src = "/webjars/htmx.org/dist/htmx.min.js" }
         style {
             unsafe {
                 raw("""
