@@ -1,0 +1,138 @@
+package kdaisyui.example
+
+import kdaisyui.components.*
+import kdaisyui.core.addClassNames
+import kotlinx.html.*
+
+fun HTML.dashboardShell() {
+    lang = "en"
+    head {
+        meta { charset = "utf-8" }
+        title { +"Dashboard" }
+        meta { name = "viewport"; content = "width=device-width, initial-scale=1" }
+        link { rel = "stylesheet"; href = "https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" }
+        link { rel = "stylesheet"; href = "https://cdn.jsdelivr.net/npm/daisyui@5/full.css" }
+        link { rel = "stylesheet"; href = "https://cdn.jsdelivr.net/npm/tailwindcss@4" }
+        script { src = "https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js" }
+        style {
+            unsafe {
+                raw("""
+                    .htmx-indicator { opacity: 0; transition: opacity 200ms ease-in; }
+                    .htmx-request .htmx-indicator, .htmx-request.htmx-indicator { opacity: 1; }
+                """.trimIndent())
+            }
+        }
+    }
+    body("drawer bg-base-200 lg:drawer-open min-h-screen") {
+        input {
+            id = "my-drawer"
+            type = InputType.checkBox
+            classes = setOf("drawer-toggle")
+        }
+        main("drawer-content") {
+            div("grid grid-cols-12 grid-rows-[min-content] gap-y-12 p-4 lg:gap-x-12 lg:p-10") {
+                shellHeader()
+                htmxPlaceholder("/fragments/stats", "load", "col-span-12")
+                htmxPlaceholder("/fragments/cards-row1", "load delay:100ms", "col-span-12 grid grid-cols-12 gap-y-12 lg:gap-x-12")
+                htmxPlaceholder("/fragments/cards-row2", "revealed", "col-span-12 grid grid-cols-12 gap-y-12 lg:gap-x-12")
+                htmxPlaceholder("/fragments/forms", "revealed", "col-span-12 grid grid-cols-12 gap-y-12 lg:gap-x-12")
+                htmxPlaceholder("/fragments/form-sections", "revealed", "col-span-12 grid grid-cols-12 gap-y-12 lg:gap-x-12")
+                htmxPlaceholder("/fragments/payment", "revealed", "col-span-12 grid grid-cols-12 gap-y-12 lg:gap-x-12")
+            }
+        }
+        aside("drawer-side z-10") {
+            label {
+                htmlFor = "my-drawer"
+                classes = setOf("drawer-overlay")
+            }
+            shellSidebar()
+        }
+    }
+}
+
+private fun FlowContent.htmxPlaceholder(url: String, trigger: String, extraClasses: String) {
+    div {
+        addClassNames(extraClasses)
+        hxGet(url)
+        hxTrigger(trigger)
+        hxSwap("outerHTML")
+        div("flex justify-center py-12 col-span-12") {
+            span("loading loading-spinner loading-lg") {}
+        }
+    }
+}
+
+private fun FlowContent.shellHeader() {
+    header("col-span-12 flex items-center gap-2 lg:gap-4") {
+        label {
+            htmlFor = "my-drawer"
+            classes = setOf("btn", "btn-square", "btn-ghost", "drawer-button", "lg:hidden")
+            +"☰"
+        }
+        div("grow") {
+            h1("lg:text-2xl lg:font-light") { +"Dashboard" }
+        }
+        div {
+            daisyInput(
+                size = InputSize.Sm,
+                placeholder = "Search",
+                extraClasses = "rounded-full max-sm:w-24",
+            )
+        }
+        daisyDropdown(end = true, extraClasses = "z-10") {
+            div {
+                attributes["tabindex"] = "0"
+                classes = setOf("avatar", "btn", "btn-circle", "btn-ghost")
+                div("w-10 rounded-full") {
+                    img(src = "https://picsum.photos/80/80?5")
+                }
+            }
+            daisyDropdownContent(extraClasses = "rounded-box bg-base-100 mt-3 w-52 p-2 shadow-2xl") {
+                attributes["tabindex"] = "0"
+                li { a { +"Profile" } }
+                li {
+                    a {
+                        +"Inbox"
+                        daisyBadge("12", variant = BadgeVariant.Success)
+                    }
+                }
+                li { a { +"Settings" } }
+                li { a { +"Logout" } }
+            }
+        }
+    }
+}
+
+private fun FlowContent.shellSidebar() {
+    nav("bg-base-100 flex min-h-screen w-72 flex-col gap-2 overflow-y-auto px-6 py-10") {
+        div("mx-4 flex items-center gap-2 font-black") { +"Daisy Corp" }
+        daisyMenu(extraClasses = "w-full") {
+            li { a("menu-active") { +"Dashboard" } }
+            li { a { +"Users" } }
+            sidebarSubmenu("Products", listOf("All Products", "Add New", "Categories", "Tags", "Reports", "Archive"))
+            sidebarSubmenu("Transactions", listOf("All Transactions", "Failed Transactions", "Successful Transactions"))
+            li { a { +"Stats" } }
+            li { a { +"Logs" } }
+            li {
+                a {
+                    +"Messages"
+                    daisyBadge("12", variant = BadgeVariant.Info, size = BadgeSize.Sm)
+                }
+            }
+            sidebarSubmenu("Settings", listOf("General", "Themes", "Routes", "Comments", "Media", "Roles", "Merchants", "Databases", "Gateways", "Plugins", "API", "Support"))
+        }
+    }
+}
+
+private fun UL.sidebarSubmenu(title: String, items: List<String>) {
+    li {
+        details {
+            summary { +title }
+            ul {
+                for (item in items) {
+                    li { a { +item } }
+                }
+            }
+        }
+    }
+}
