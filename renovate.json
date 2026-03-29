@@ -10,22 +10,26 @@
   "prHourlyLimit": 2,
   "schedule": ["before 6am on Monday"],
   "timezone": "Europe/Berlin",
-  "dryRun": false,
+  "dryRun": null,
   "semanticCommits": "enabled",
   "commitMessagePrefix": "chore(deps):",
 
   "packageRules": [
     {
       "description": "Group all Ktor updates into one PR",
-      "matchPackagePrefixes": ["io.ktor"],
       "groupName": "Ktor",
-      "groupSlug": "ktor"
+      "groupSlug": "ktor",
+      "matchPackageNames": [
+        "io.ktor{/,}**"
+      ]
     },
     {
       "description": "Group all webjars updates into one PR",
-      "matchPackagePrefixes": ["org.webjars"],
       "groupName": "webjars",
-      "groupSlug": "webjars"
+      "groupSlug": "webjars",
+      "matchPackageNames": [
+        "org.webjars{/,}**"
+      ]
     },
     {
       "description": "Group all Kotlin-related updates into one PR",
@@ -51,21 +55,25 @@
 
   "gradle": {
     "enabled": true,
-    "fileMatch": [
-      "(^|/)build\\.gradle\\.kts$",
-      "(^|/)settings\\.gradle\\.kts$",
-      "(^|/)gradle\\.properties$",
-      "(^|/)buildSrc/.+\\.gradle\\.kts$"
+    "managerFilePatterns": [
+      "/(^|/)build\.gradle\.kts$/",
+      "/(^|/)settings\.gradle\.kts$/",
+      "/(^|/)gradle\.properties$/",
+      "/(^|/)buildSrc/.+\.gradle\.kts$/"
     ]
   },
 
   "npm": {
     "enabled": true,
-    "fileMatch": ["(^|/)e2e-tests/package\\.json$"]
+    "managerFilePatterns": [
+      "/(^|/)e2e-tests/package\.json$/"
+    ]
   },
 
   "github-actions": {
     "enabled": true,
-    "fileMatch": ["^\\.github/workflows/[^/]+\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/^\.github/workflows/[^/]+\.ya?ml$/"
+    ]
   }
 }
