@@ -18,9 +18,12 @@ export default defineConfig({
   ],
   // Start the Ktor server before tests, stop after
   webServer: {
-    command: 'cd .. && ./gradlew :example-app:run',
+    command: '../gradlew :example-app:run --no-daemon',
+    cwd: '..',
     url: 'http://localhost:8080',
-    reuseExistingServer: true,
-    timeout: 60_000,
+    reuseExistingServer: !process.env['CI'],
+    timeout: 120_000,
+    stdout: 'pipe',
+    stderr: 'pipe',
   },
 });
