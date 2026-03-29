@@ -95,7 +95,7 @@ fun Route.dashboardRoutes() {
 }
 ```
 
-Now let's build the shell. We load DaisyUI and htmx from CDN — no build step required:
+Now let's build the shell. We load DaisyUI and htmx from Ktor Webjars routes:
 
 ```kotlin
 fun HTML.shellPage() {
@@ -105,13 +105,13 @@ fun HTML.shellPage() {
         title { +"Dashboard" }
         meta { name = "viewport"; content = "width=device-width, initial-scale=1" }
 
-        // DaisyUI + Tailwind CSS from CDN
-        link { rel = "stylesheet"; href = "https://cdn.jsdelivr.net/npm/daisyui@5/daisyui.css" }
-        link { rel = "stylesheet"; href = "https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" }
-        script { src = "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" }
+        // DaisyUI + Tailwind CSS via Webjars
+        link { rel = "stylesheet"; href = "/webjars/daisyui/daisyui.css" }
+        link { rel = "stylesheet"; href = "/webjars/daisyui/themes.css" }
+        script { src = "/webjars/tailwindcss__browser/dist/index.global.js" }
 
-        // htmx from CDN
-        script { src = "https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js" }
+        // htmx via Webjars
+        script { src = "/webjars/htmx.org/dist/htmx.min.js" }
     }
     body("drawer bg-base-200 lg:drawer-open min-h-screen") {
         input { id = "my-drawer"; type = InputType.checkBox; classes = setOf("drawer-toggle") }
@@ -344,4 +344,4 @@ And further down, the payment section:
 - `"load"` fetches immediately, `"revealed"` fetches on scroll
 - `"outerHTML"` swap replaces the placeholder cleanly
 
-The server is the single source of truth for all rendering. No client-side JavaScript framework, no JSON APIs, no build steps for CSS (CDN). Just Kotlin on the server.
+The server is the single source of truth for all rendering. No client-side JavaScript framework, no JSON APIs, and no frontend bundler setup. Just Kotlin on the server.
