@@ -28,7 +28,7 @@ The repository ships a `.tool-versions` file that pins the exact versions of JDK
 ```bash
 git clone https://github.com/ollin/kdaisyUI
 cd kdaisyUI
-asdf install    # installs JDK 21, Gradle 9.3.1, Node 24
+asdf install    # installs exact versions from .tool-versions
 ./gradlew :lib:test
 ```
 
@@ -43,7 +43,7 @@ asdf install
 
 ### With any JDK 21+
 
-The Gradle wrapper (`./gradlew`) downloads Gradle automatically. You only need a JDK 21 or newer on your `PATH`:
+The Gradle wrapper (`./gradlew`) downloads Gradle automatically (exact version in [`gradle/wrapper/gradle-wrapper.properties`](../gradle/wrapper/gradle-wrapper.properties)). You only need a JDK 21 or newer on your `PATH`:
 
 ```bash
 git clone https://github.com/ollin/kdaisyUI

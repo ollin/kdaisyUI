@@ -4,8 +4,8 @@ In this tutorial we will render our first DaisyUI components from Kotlin. By the
 
 ## Prerequisites
 
-- JDK 25 (the Gradle toolchain downloads it automatically)
-- Gradle 9+
+- JDK 21+ (the Gradle toolchain downloads it automatically — exact version in [`.tool-versions`](../../.tool-versions))
+- Gradle (the wrapper `./gradlew` downloads it — exact version in [`gradle/wrapper/gradle-wrapper.properties`](../../gradle/wrapper/gradle-wrapper.properties))
 - Basic Kotlin knowledge
 
 ## 1. Set up the project
@@ -23,7 +23,8 @@ includeBuild("../kdaisyUI")   // point to where you cloned kdaisyUI
 
 ```kotlin
 plugins {
-    kotlin("jvm") version "2.3.10"
+    // current Kotlin version: see gradle.properties → versions.kotlin
+    kotlin("jvm") version "«versions.kotlin»"
 }
 
 repositories {
@@ -32,9 +33,13 @@ repositories {
 
 dependencies {
     implementation(project(":lib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
+    // current kotlinx-html version: see gradle.properties → versions.kotlinx-html
+    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:«versions.kotlinx-html»")
 }
 ```
+
+> Replace `«versions.kotlin»` and `«versions.kotlinx-html»` with the values from
+> [`gradle.properties`](../../gradle.properties) in the kdaisyUI repository.
 
 Run `./gradlew build` to verify everything resolves.
 

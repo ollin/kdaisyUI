@@ -92,29 +92,31 @@ git clone https://github.com/ollin/kdaisyUI
 # Open in VS Code → "Reopen in Container"
 ```
 
-The container provides JDK 21, Gradle 9.3.1, Node 24, and Playwright Chromium pre-installed. Port 8080 is forwarded automatically.
+The container provides JDK, Gradle, Node, and Playwright Chromium pre-installed (exact versions from [`.tool-versions`](.tool-versions)). Port 8080 is forwarded automatically.
 
 ### Option B — Local with asdf
 
 ```bash
 git clone https://github.com/ollin/kdaisyUI
 cd kdaisyUI
-asdf install          # reads .tool-versions → JDK 21, Gradle 9.3.1, Node 24
+asdf install          # reads .tool-versions — exact versions pinned there
 ./gradlew :lib:test   # run unit tests
 ```
 
 ### Option C — Any JDK 21+
 
-The Gradle wrapper downloads Gradle automatically. Just bring your own JDK 21+.
+The Gradle wrapper downloads Gradle automatically (version in [`gradle/wrapper/gradle-wrapper.properties`](gradle/wrapper/gradle-wrapper.properties)). Just bring your own JDK 21+.
 
 ## Requirements
 
-| Tool | Version | Purpose |
-|---|---|---|
-| JDK | **21** (toolchain) | Compile and run |
-| Gradle | **9.3.1** (wrapper) | Build system |
-| Kotlin | **2.3.10** | Language |
-| Node | **24** | E2E tests (Playwright) |
+Exact versions are the single source of truth in these files:
+
+| What | Where |
+|---|---|
+| JDK, Gradle, Node | [`.tool-versions`](.tool-versions) |
+| Kotlin, kotlinx-html | [`gradle.properties`](gradle.properties) |
+| Gradle wrapper | [`gradle/wrapper/gradle-wrapper.properties`](gradle/wrapper/gradle-wrapper.properties) |
+| Ktor, webjars | [`example-app/build.gradle.kts`](example-app/build.gradle.kts) |
 
 ## Run the example
 

@@ -25,9 +25,9 @@ Every component supports these escape-hatch parameters:
 
 ## Requirements
 
-- JDK: **25** (auto-downloaded via Gradle toolchain)
-- Kotlin: **2.3.10**
-- kotlinx-html: **0.12.0**
+- JDK: **21** (auto-downloaded via Gradle toolchain — see [`buildSrc/src/main/kotlin/kdaisyui.kotlin-library-conventions.gradle.kts`](../buildSrc/src/main/kotlin/kdaisyui.kotlin-library-conventions.gradle.kts))
+- Kotlin: see [`gradle.properties`](../gradle.properties) → `versions.kotlin`
+- kotlinx-html: see [`gradle.properties`](../gradle.properties) → `versions.kotlinx-html`
 
 ---
 
