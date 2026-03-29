@@ -22,5 +22,5 @@ dependencies {
     implementation("org.webjars.npm:tailwindcss__browser:4.2.1")
     implementation("org.webjars.npm:htmx.org:2.0.8")
 
-    implementation("ch.qos.logback:logback-classic:1.5.18")
+    implementation("ch.qos.logback:logback-classic:1.5.32")
 }
