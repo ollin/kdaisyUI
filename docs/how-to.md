@@ -2,6 +2,68 @@
 
 Task-oriented recipes for common goals. Each guide assumes you have kdaisyUI set up and know the basics.
 
+## Set up a development environment
+
+### With Dev Container (VS Code / IntelliJ / Codespaces)
+
+Clone the repository and open it in a Dev Container-compatible editor. The container definition is in `.devcontainer/devcontainer.json` and provides everything pre-installed:
+
+```bash
+git clone https://github.com/ollin/kdaisyUI
+# VS Code: "Reopen in Container"
+# IntelliJ: Dev Containers plugin → "Open Folder in Container"
+# GitHub Codespaces: "Code" → "Open with Codespaces"
+```
+
+After the container starts, port 8080 is forwarded automatically. Run the example:
+
+```bash
+./gradlew :example-app:run
+```
+
+### With asdf (local)
+
+The repository ships a `.tool-versions` file that pins the exact versions of JDK, Gradle, and Node used in development:
+
+```bash
+git clone https://github.com/ollin/kdaisyUI
+cd kdaisyUI
+asdf install    # installs JDK 21, Gradle 9.3.1, Node 24
+./gradlew :lib:test
+```
+
+If you do not have an asdf plugin installed yet:
+
+```bash
+asdf plugin add java
+asdf plugin add gradle
+asdf plugin add nodejs
+asdf install
+```
+
+### With any JDK 21+
+
+The Gradle wrapper (`./gradlew`) downloads Gradle automatically. You only need a JDK 21 or newer on your `PATH`:
+
+```bash
+git clone https://github.com/ollin/kdaisyUI
+cd kdaisyUI
+./gradlew :lib:test
+```
+
+## Run the E2E tests
+
+The E2E tests use Playwright and require Node. Install dependencies once, then run:
+
+```bash
+cd e2e-tests
+npm install
+npx playwright install chromium
+npx playwright test
+```
+
+The server starts automatically via the `webServer` config in `playwright.config.ts`. If the server is already running on port 8080, it is reused.
+
 ## Add a component to your page
 
 Every component is a `FlowContent` extension function. Call it inside any kotlinx.html block element:

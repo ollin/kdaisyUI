@@ -81,11 +81,40 @@ val html = createHTML().div {
 | `:lib` | Core library — DSL component wrappers |
 | `:example-app` | Ktor + htmx demo dashboard |
 
+## Development environment
+
+### Option A — Dev Container (recommended for new contributors)
+
+Open in any Dev Container-compatible editor (VS Code, IntelliJ, GitHub Codespaces):
+
+```bash
+git clone https://github.com/ollin/kdaisyUI
+# Open in VS Code → "Reopen in Container"
+```
+
+The container provides JDK 21, Gradle 9.3.1, Node 24, and Playwright Chromium pre-installed. Port 8080 is forwarded automatically.
+
+### Option B — Local with asdf
+
+```bash
+git clone https://github.com/ollin/kdaisyUI
+cd kdaisyUI
+asdf install          # reads .tool-versions → JDK 21, Gradle 9.3.1, Node 24
+./gradlew :lib:test   # run unit tests
+```
+
+### Option C — Any JDK 21+
+
+The Gradle wrapper downloads Gradle automatically. Just bring your own JDK 21+.
+
 ## Requirements
 
-- JDK toolchain: **25**
-- Kotlin: **2.3.10**
-- kotlinx-html: **0.12.0**
+| Tool | Version | Purpose |
+|---|---|---|
+| JDK | **21** (toolchain) | Compile and run |
+| Gradle | **9.3.1** (wrapper) | Build system |
+| Kotlin | **2.3.10** | Language |
+| Node | **24** | E2E tests (Playwright) |
 
 ## Run the example
 
