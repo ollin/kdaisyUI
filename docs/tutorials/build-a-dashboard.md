@@ -10,13 +10,15 @@ We will use three things:
 
 ## What we will build
 
-An admin dashboard with:
+A developer tools dashboard (DevTrack) with:
 
-- A sidebar with navigation
+- A sidebar with navigation (Overview, Repositories, Issues, Pipelines, Teams)
 - A header with search
-- Stats cards (loaded immediately)
-- Data tables and charts (loaded after a short delay)
-- Forms and payment section (loaded when scrolled into view)
+- Stats cards — Active Repositories, Open Issues, PRs Merged, Pipeline Success Rate (loaded immediately)
+- Pipeline runs table and issue tracker (loaded after a short delay)
+- Repository form, team settings, and team management (loaded when scrolled into view)
+
+![Finished DevTrack dashboard](../screenshots/overview.png)
 
 ## 1. Create the project
 
@@ -205,6 +207,8 @@ section("stats stats-vertical xl:stats-horizontal bg-base-100 col-span-12 w-full
 
 Refresh the page. You should see the stats section.
 
+![Stats section rendered](../screenshots/stats.png)
+
 ## 7. Move stats to a fragment
 
 Now let's introduce htmx. The idea: instead of rendering the stats inside the shell, we create a separate endpoint that returns just the stats HTML. The browser fetches it automatically after the page loads.
@@ -333,8 +337,15 @@ Open http://localhost:8080 and watch the network tab. You will see:
 3. `/fragments/cards-row1` loads after 100ms
 4. Lower sections load as you scroll
 
-Scrolling down reveals the forms section:
-And further down, the payment section:
+![Stats and pipeline runs loaded](../screenshots/overview.png)
+
+Scrolling down reveals the repository form and team settings:
+
+![Forms and settings section](../screenshots/forms-section.png)
+
+And further down, the team management section:
+
+![Team management section](../screenshots/team-section.png)
 
 ## What you learned
 

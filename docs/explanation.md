@@ -160,4 +160,6 @@ Browser ──── htmx ────► Ktor server ──── kotlinx.html 
 
 The server is the single source of truth for all UI rendering. There is no client-side state, no client-side routing, no JavaScript build step. The browser receives HTML and displays it.
 
-The result is a fully styled, interactive dashboard rendered entirely on the server.
+The result is a fully styled, interactive application rendered entirely on the server — the DevTrack example app included in this repository:
+
+![DevTrack — full page rendered by Ktor + kdaisyUI + htmx](screenshots/full-page.png)

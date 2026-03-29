@@ -4,6 +4,8 @@ Type-safe [DaisyUI](https://daisyui.com/) components for [kotlinx.html](https://
 
 Write DaisyUI markup in Kotlin with autocompletion, compile-time checks, and zero class-name typos.
 
+![DevTrack — example app built with kdaisyUI](docs/screenshots/overview.png)
+
 ```kotlin
 createHTML().div {
     daisyCard(extraClasses = "bg-base-100 shadow-xs") {
@@ -99,3 +101,5 @@ MIT. See [LICENSE](LICENSE).
 ## Acknowledgements
 
 DaisyUI is the reason this library exists — making Tailwind CSS semantic is genuinely great work.
+
+The example app (`example-app/`) is a DevTrack dashboard — a fictional developer tools SaaS — demonstrating progressive loading with htmx, sidebar navigation, stats, tables, forms, and team management, all rendered server-side with Ktor and kdaisyUI.

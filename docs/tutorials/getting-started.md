@@ -209,4 +209,6 @@ Output:
 
 Now that you can render components, let's build a real application. Continue with [Build a dashboard with Ktor and htmx](build-a-dashboard.md) to serve these components from a web server with progressive loading.
 
-You are now ready to build a full dashboard with these same building blocks.
+Here is what a full application built with kdaisyUI looks like — the DevTrack example app included in this repository:
+
+![DevTrack dashboard built with kdaisyUI](../screenshots/overview.png)
