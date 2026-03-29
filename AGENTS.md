@@ -1,6 +1,6 @@
 # kdaisyUI Project Knowledge Base
 
-**Generated:** 2026-03-29
+**Generated:** 2026-03-29 · **Updated:** 2026-03-29
 **Stack:** Kotlin 2.3.x + Gradle 9.x + kotlinx.html + DaisyUI
 
 ## OVERVIEW
@@ -32,6 +32,8 @@ kdaisyUI/
 | E2E tests | `e2e-tests/tests/` |
 | Build config | `buildSrc/`, `gradle.properties`, `settings.gradle.kts` |
 | Version pins | `gradle.properties`, `.tool-versions` |
+| Release config | `release-please-config.json`, `.release-please-manifest.json` |
+| CI workflows | `.github/workflows/` |
 
 ## CONVENTIONS
 
@@ -68,9 +70,34 @@ Raw Gradle commands (what just recipes call under the hood):
 cd e2e-tests && npm test         # E2E tests (Playwright config handles server lifecycle)
 ```
 
+## RELEASE WORKFLOW
+
+**Maven coordinates:** `com.nautsch.kdaisyui:kdaisyui` (published to GitHub Packages)
+
+Versioning is fully automated via [release-please](https://github.com/googleapis/release-please) + conventional commits:
+
+| Step | Trigger | What happens |
+|------|---------|-------------|
+| 1. Open PR | — | `pr-conventional-commits.yml` validates PR title against Conventional Commits spec |
+| 2. Merge PR to `main` | push to `main` | `release-please.yml` opens/updates a Release PR with SemVer bump + CHANGELOG |
+| 3. Merge Release PR | push to `main` | release-please creates git tag (`v0.x.y`) + GitHub Release |
+| 4. Publish | GitHub Release created | `publish.yml` runs `./gradlew :lib:publish -Pversion=0.x.y` |
+
+**Version bump rules (conventional commits):**
+- `fix:` → patch (`0.1.0` → `0.1.1`)
+- `feat:` → minor (`0.1.0` → `0.2.0`)
+- `feat!:` or `BREAKING CHANGE:` → major (`0.1.0` → `1.0.0`)
+- `chore:`, `ci:`, `docs:`, `refactor:` → no release
+
+**Key files:**
+- `release-please-config.json` — release type (`java`), component name
+- `.release-please-manifest.json` — current version tracked by release-please
+- `gradle.properties` → `version=` property — updated automatically by release-please on each release
+
+**NEVER** manually set `-Pversion=` in workflows or bump the version in `gradle.properties` by hand — release-please owns that.
+
 ## NOTES
 
-- No published artifacts yet — use composite builds
 - Kotlin version split: `gradle.properties` (2.3.10) vs `libs.versions.toml` (2.3.20) — reconcile if issues
 - Missing root `build.gradle.kts` — config in subprojects only
 
