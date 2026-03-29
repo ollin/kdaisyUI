@@ -26,6 +26,6 @@ jobs:
           cache: gradle
 
       - name: Publish lib
-        run: ./gradlew :lib:publish --no-daemon -Pversion=1.0.${{ github.run_number }}
+        run: ./gradlew :lib:publish --no-daemon -Pversion=0.1.${{ github.run_number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
