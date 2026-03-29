@@ -7,6 +7,5 @@ build
 # Ignore Kotlin plugin data
 .kotlin
 
-# Ignore npm dependencies
+# Ignore npm dependencies (node_modules everywhere, but keep package-lock.json in subprojects)
 node_modules/
-package-lock.json
