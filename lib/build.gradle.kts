@@ -4,7 +4,7 @@ plugins {
 }
 
 version = project.findProperty("version")?.toString() ?: "0.0.1-SNAPSHOT"
-group = "io.github.ollin"
+group = "com.nautsch.kdaisyui"
 
 repositories {
     mavenCentral()
