@@ -10,7 +10,7 @@
   "prHourlyLimit": 2,
   "schedule": ["before 6am on Monday"],
   "timezone": "Europe/Berlin",
-  "dryRun": null,
+  "dryRun": false,
   "semanticCommits": "enabled",
   "commitMessagePrefix": "chore(deps):",
 
