@@ -8,12 +8,12 @@ import io.ktor.server.webjars.*
 
 fun main() {
     embeddedServer(Netty, port = 8080) {
-        install(Webjars)
         configureRouting()
     }.start(wait = true)
 }
 
 fun Application.configureRouting() {
+    install(Webjars)
     routing {
         dashboardRoutes()
     }
