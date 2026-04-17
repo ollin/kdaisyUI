@@ -35,7 +35,7 @@ This project follows the [Diátaxis](https://diataxis.fr/) documentation framewo
 
 | | Learn | Work |
 |---|---|---|
-| **Hands-on** | [Tutorials](docs/tutorials/) — step-by-step lessons | [How-to guides](docs/how-to.md) — solve specific tasks |
+| **Hands-on** | [Tutorials](docs/tutorials/index.md) — step-by-step lessons | [How-to guides](docs/how-to.md) — solve specific tasks |
 | **Theory** | [Explanation](docs/explanation.md) — background concepts | [Reference](docs/reference.md) — complete API |
 
 ### Quick links
