@@ -139,12 +139,18 @@ Stats are a DaisyUI component that shows key metrics:
 
 ```kotlin
 val html = createHTML(prettyPrint = false).div {
-    daisyStats(horizontal = true, extraClasses = "bg-base-100 shadow-xs w-full") {
-        daisyStat {
-            daisyStatTitle("Users")
-            daisyStatValue("1,200")
-            daisyStatDesc("12% increase")
-        }
+daisyStat(horizontal = true, extraClasses = "bg-base-100 shadow-xs w-full") {
+    daisyStatStat {
+        daisyStatStatTitle("Users")
+        daisyStatStatValue("1,200")
+        daisyStatStatDesc("12% increase")
+    }
+    daisyStatStat {
+        daisyStatStatTitle("Revenue")
+        daisyStatStatValue("$34,000")
+        daisyStatStatDesc("8% increase")
+    }
+}
         daisyStat {
             daisyStatTitle("Revenue")
             daisyStatValue("$34,000")
