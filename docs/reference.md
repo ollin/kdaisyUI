@@ -115,7 +115,10 @@ import kdaisyui.components.*
 <a href="#toggle"><img src="screenshots/components/toggle.png" width="180" alt="Toggle"><br><b>Toggle</b></a><br>
 <sub>Switch-style boolean input</sub>
 </td>
-<td align="center" width="200"></td>
+<td align="center" width="200">
+<a href="#modal"><br><b>Modal</b></a><br>
+<sub>Modal dialogs</sub>
+</td>
 <td align="center" width="200"></td>
 </tr>
 </table>
@@ -149,6 +152,11 @@ Informs users about important events. Renders `<div role="alert" class="alert ..
 ```kotlin
 fun FlowContent.daisyAlert(
     variant: AlertVariant? = null,   // Info | Success | Warning | Error
+    dash: Boolean = false,
+    horizontal: Boolean = false,
+    outline: Boolean = false,
+    soft: Boolean = false,
+    vertical: Boolean = false,
     extraClasses: String? = null,
     attrs: (DIV.() -> Unit)? = null,
     content: (DIV.() -> Unit),
@@ -159,8 +167,11 @@ fun FlowContent.daisyAlert(
 daisyAlert(variant = AlertVariant.Success) {
     span { +"Pipeline completed successfully." }
 }
-daisyAlert(variant = AlertVariant.Error) {
+daisyAlert(variant = AlertVariant.Error, soft = true) {
     span { +"Build failed on step 3." }
+}
+daisyAlert(variant = AlertVariant.Warning, horizontal = true) {
+    span { +"Check your configuration." }
 }
 ```
 
@@ -174,6 +185,9 @@ Displays user or entity images. Renders `<div class="avatar">`.
 
 ```kotlin
 fun FlowContent.daisyAvatar(
+    offline: Boolean = false,
+    online: Boolean = false,
+    placeholder: Boolean = false,
     extraClasses: String? = null,
     attrs: (DIV.() -> Unit)? = null,
     content: (DIV.() -> Unit),
@@ -192,6 +206,10 @@ daisyAvatar {
         img(src = "https://example.com/photo.jpg")
     }
 }
+// Online indicator:
+daisyAvatar(online = true) {
+    div("w-12 rounded-full") { img(src = "user.jpg") }
+}
 ```
 
 ---
@@ -205,10 +223,12 @@ Labels, counts, and status indicators. Renders `<span class="badge ...">`.
 ```kotlin
 fun FlowContent.daisyBadge(
     text: String? = null,
-    variant: BadgeVariant? = null,   // Neutral | Primary | Secondary | Accent | Ghost
-                                     // Info | Success | Warning | Error
-    size: BadgeSize? = null,         // Xs | Sm | Md | Lg
+    variant: BadgeVariant? = null,   // Neutral | Primary | Secondary | Accent | Info | Success | Warning | Error
+    size: BadgeSize? = null,         // Xs | Sm | Md | Lg | Xl
+    dash: Boolean = false,
+    ghost: Boolean = false,
     outline: Boolean = false,
+    soft: Boolean = false,
     extraClasses: String? = null,
     attrs: (SPAN.() -> Unit)? = null,
     content: (SPAN.() -> Unit)? = null,
@@ -219,6 +239,7 @@ fun FlowContent.daisyBadge(
 daisyBadge("Passing", variant = BadgeVariant.Success)
 daisyBadge("3", variant = BadgeVariant.Error, size = BadgeSize.Sm)
 daisyBadge("Draft", outline = true)
+daisyBadge("New", variant = BadgeVariant.Primary, soft = true)
 ```
 
 ---
@@ -232,14 +253,18 @@ Actions and triggers. Renders `<button class="btn ...">`.
 ```kotlin
 fun FlowContent.daisyButton(
     text: String? = null,
-    variant: ButtonVariant? = null,  // Neutral | Primary | Secondary | Accent | Ghost | Link
-                                     // Info | Success | Warning | Error
-    size: ButtonSize? = null,        // Xs | Sm | Md | Lg
-    outline: Boolean = false,
-    wide: Boolean = false,
+    variant: ButtonVariant? = null,  // Neutral | Primary | Secondary | Accent | Info | Success | Warning | Error
+    size: ButtonSize? = null,        // Xs | Sm | Md | Lg | Xl
+    active: Boolean = false,
     block: Boolean = false,
     circle: Boolean = false,
+    dash: Boolean = false,
+    ghost: Boolean = false,
+    link: Boolean = false,
+    outline: Boolean = false,
+    soft: Boolean = false,
     square: Boolean = false,
+    wide: Boolean = false,
     disabled: Boolean = false,
     type: ButtonType? = null,
     extraClasses: String? = null,
@@ -252,6 +277,8 @@ fun FlowContent.daisyButton(
 daisyButton("Deploy", variant = ButtonVariant.Primary)
 daisyButton("Cancel", variant = ButtonVariant.Ghost)
 daisyButton("Delete", variant = ButtonVariant.Error, outline = true, size = ButtonSize.Sm)
+daisyButton("Soft", variant = ButtonVariant.Primary, soft = true)
+daisyButton("Dashed", variant = ButtonVariant.Secondary, dash = true)
 ```
 
 ---
@@ -263,9 +290,19 @@ daisyButton("Delete", variant = ButtonVariant.Error, outline = true, size = Butt
 Content containers. Renders `<div class="card">`, `<div class="card-body">`, `<h2 class="card-title">`.
 
 ```kotlin
-fun FlowContent.daisyCard(extraClasses, attrs, content: (DIV.() -> Unit))
+fun FlowContent.daisyCard(
+    size: CardSize? = null,          // Xs | Sm | Md | Lg | Xl
+    border: Boolean = false,
+    dash: Boolean = false,
+    imageFull: Boolean = false,
+    side: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DIV.() -> Unit)? = null,
+    content: (DIV.() -> Unit),
+)
+fun FlowContent.daisyCardTitle(text: String? = null, extraClasses, attrs, content: (H2.() -> Unit)?)
 fun FlowContent.daisyCardBody(extraClasses, attrs, content: (DIV.() -> Unit))
-fun FlowContent.daisyCardTitle(text?, extraClasses, attrs, content: (H2.() -> Unit)?)
+fun FlowContent.daisyCardActions(extraClasses, attrs, content: (DIV.() -> Unit))
 ```
 
 ```kotlin
@@ -276,10 +313,15 @@ daisyCard(extraClasses = "bg-base-100 shadow-xs") {
             daisyBadge("Passing", variant = BadgeVariant.Success, size = BadgeSize.Sm)
         }
         p { +"api-gateway · main · 2m 14s" }
-        div("card-actions justify-end") {
+        daisyCardActions {
             daisyButton("View logs", variant = ButtonVariant.Primary, size = ButtonSize.Sm)
         }
     }
+}
+// Card with image on side
+daisyCard(side = true, extraClasses = "bg-base-100 shadow-xl") {
+    figure { img(src = "card.jpg") }
+    daisyCardBody { /* ... */ }
 }
 ```
 
@@ -293,7 +335,8 @@ Boolean selection for forms. Renders `<input type="checkbox" class="checkbox ...
 
 ```kotlin
 fun FlowContent.daisyCheckbox(
-    size: CheckboxSize? = null,   // Xs | Sm | Md | Lg
+    variant: CheckboxVariant? = null,  // Primary | Secondary | Accent | Neutral | Success | Warning | Info | Error
+    size: CheckboxSize? = null,        // Xs | Sm | Md | Lg | Xl
     checked: Boolean = false,
     disabled: Boolean = false,
     extraClasses: String? = null,
@@ -306,6 +349,10 @@ label("flex cursor-pointer gap-4") {
     daisyCheckbox(size = CheckboxSize.Sm, checked = true)
     span("label-text") { +"Branch protection enabled" }
 }
+label("flex cursor-pointer gap-4") {
+    daisyCheckbox(variant = CheckboxVariant.Success, checked = true)
+    span("label-text") { +"Feature enabled" }
+}
 ```
 
 ---
@@ -317,21 +364,31 @@ label("flex cursor-pointer gap-4") {
 Sidebar layout with mobile toggle. Renders a `<div class="drawer">` with a hidden checkbox controller.
 
 ```kotlin
-fun FlowContent.daisyDrawer(drawerId: String = "my-drawer", extraClasses, attrs, content)
+fun FlowContent.daisyDrawer(
+    end: Boolean = false,
+    open: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DIV.() -> Unit)? = null,
+    content: (DIV.() -> Unit),
+)
+fun FlowContent.daisyDrawerToggle(extraClasses, attrs, content: (DIV.() -> Unit))
 fun FlowContent.daisyDrawerContent(extraClasses, attrs, content: (DIV.() -> Unit))
 fun FlowContent.daisyDrawerSide(extraClasses, attrs, content: (DIV.() -> Unit))
-fun FlowContent.daisyDrawerOverlay(drawerId: String = "my-drawer", extraClasses, attrs)
-fun FlowContent.daisyDrawerButton(drawerId: String = "my-drawer", extraClasses, attrs, content)
+fun FlowContent.daisyDrawerOverlay(extraClasses, attrs, content: (LABEL.() -> Unit))
 ```
 
 ```kotlin
-body("drawer lg:drawer-open") {
-    input { id = "sidebar"; type = InputType.checkBox; classes = setOf("drawer-toggle") }
-    main("drawer-content") {
-        /* page content */
+daisyDrawer(extraClasses = "lg:drawer-open") {
+    daisyDrawerToggle {
+        input { id = "sidebar"; type = InputType.checkBox; classes = setOf("drawer-toggle") }
     }
-    aside("drawer-side") {
-        label { htmlFor = "sidebar"; classes = setOf("drawer-overlay") }
+    daisyDrawerContent {
+        main("p-6") {
+            h1 { +"Page content" }
+        }
+    }
+    daisyDrawerSide {
+        daisyDrawerOverlay { htmlFor = "sidebar" }
         nav("bg-base-100 min-h-screen w-72 p-4") {
             daisyMenu { li { a { +"Overview" } } }
         }
@@ -347,37 +404,40 @@ body("drawer lg:drawer-open") {
 
 ![Dropdown component](screenshots/components/dropdown.png)
 
-Context menus that open on click. Renders `<div class="dropdown ...">`.
+Context menus that open on click. Renders `<details class="dropdown ...">` (uses native `<details>` element for accessibility).
 
 ```kotlin
 fun FlowContent.daisyDropdown(
-    end: Boolean = false,
-    top: Boolean = false,
-    left: Boolean = false,
-    right: Boolean = false,
+    close: Boolean = false,
     hover: Boolean = false,
     open: Boolean = false,
-    extraClasses, attrs, content: (DIV.() -> Unit),
+    end: Boolean = false,
+    start: Boolean = false,
+    top: Boolean = false,
+    bottom: Boolean = false,
+    left: Boolean = false,
+    right: Boolean = false,
+    center: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DETAILS.() -> Unit)? = null,
+    content: (DETAILS.() -> Unit),
 )
-fun FlowContent.daisyDropdownContent(extraClasses, attrs, content: (UL.() -> Unit))
+fun FlowContent.daisyDropdownContent(extraClasses, attrs, content: (DIV.() -> Unit))
 ```
 
 ```kotlin
 daisyDropdown(end = true) {
-    div {
-        attributes["tabindex"] = "0"
-        classes = setOf("btn", "btn-sm")
-        +"Actions"
-    }
+    summary { classes = setOf("btn", "btn-sm"); +"Actions" }
     daisyDropdownContent(extraClasses = "rounded-box bg-base-100 p-2 shadow-xl") {
-        attributes["tabindex"] = "0"
-        li { a { +"View details" } }
-        li { a { +"Re-run pipeline" } }
+        ul {
+            li { a { +"View details" } }
+            li { a { +"Re-run pipeline" } }
+        }
     }
 }
 ```
 
-Both the trigger and the content need `tabindex="0"` for the CSS-based open/close to work.
+The dropdown uses `<details>` + `<summary>` for native HTML open/close behavior. No `tabindex` required.
 
 ---
 
@@ -415,13 +475,29 @@ daisyFieldset {
 Overlays a badge or element on the corner of another element. Renders `<div class="indicator">`.
 
 ```kotlin
-fun FlowContent.daisyIndicator(extraClasses, attrs, content: (DIV.() -> Unit))
+fun FlowContent.daisyIndicator(
+    bottom: Boolean = false,
+    center: Boolean = false,
+    end: Boolean = false,
+    middle: Boolean = false,
+    start: Boolean = false,
+    top: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DIV.() -> Unit)? = null,
+    content: (DIV.() -> Unit),
+)
+fun FlowContent.daisyIndicatorItem(extraClasses, attrs, content: (DIV.() -> Unit))
 ```
 
 ```kotlin
 daisyIndicator {
     daisyBadge(variant = BadgeVariant.Error, size = BadgeSize.Xs, extraClasses = "indicator-item")
     daisyButton("Notifications")
+}
+// Top-right indicator
+daisyIndicator(top = true, end = true) {
+    daisyBadge("3", variant = BadgeVariant.Error, extraClasses = "indicator-item")
+    daisyAvatar { div("w-16 rounded-full") { img(src = "user.jpg") } }
 }
 ```
 
@@ -435,11 +511,12 @@ Text entry fields. Renders `<input class="input ...">`.
 
 ```kotlin
 fun FlowContent.daisyInput(
-    type: InputType = InputType.text,
-    size: InputSize? = null,          // Xs | Sm | Md | Lg
+    variant: InputVariant? = null,    // Neutral | Primary | Secondary | Accent | Info | Success | Warning | Error
+    size: InputSize? = null,          // Xs | Sm | Md | Lg | Xl
     ghost: Boolean = false,
-    bordered: Boolean = false,
+    type: InputType = InputType.text,
     placeholder: String? = null,
+    value: String? = null,
     disabled: Boolean = false,
     extraClasses: String? = null,
     attrs: (INPUT.() -> Unit)? = null,
@@ -449,6 +526,7 @@ fun FlowContent.daisyInput(
 ```kotlin
 daisyInput(placeholder = "Search repositories...", extraClasses = "w-full")
 daisyInput(size = InputSize.Sm, placeholder = "Branch name")
+daisyInput(variant = InputVariant.Error, placeholder = "Invalid input")
 ```
 
 ---
@@ -461,8 +539,11 @@ Groups buttons and inputs with shared borders. Renders `<div class="join">`.
 
 ```kotlin
 fun FlowContent.daisyJoin(
+    horizontal: Boolean = false,
     vertical: Boolean = false,
-    extraClasses, attrs, content: (DIV.() -> Unit),
+    extraClasses: String? = null,
+    attrs: (DIV.() -> Unit)? = null,
+    content: (DIV.() -> Unit),
 )
 ```
 
@@ -480,6 +561,11 @@ daisyJoin {
     daisyInput(placeholder = "Search", extraClasses = "join-item")
     daisyButton("Go", variant = ButtonVariant.Primary, extraClasses = "join-item")
 }
+// Vertical group
+daisyJoin(vertical = true) {
+    daisyButton("Top", extraClasses = "join-item")
+    daisyButton("Bottom", extraClasses = "join-item")
+}
 ```
 
 Add `join-item` via `extraClasses` to each child element.
@@ -490,17 +576,21 @@ Add `join-item` via `extraClasses` to each child element.
 
 ![Label component](screenshots/components/label.png)
 
-Field labels and helper text. Renders `<label class="label">` and `<span class="label-text">`.
+Field labels and helper text. Renders `<span class="label">`.
 
 ```kotlin
-fun FlowContent.daisyLabel(text?, extraClasses, attrs, content: (LABEL.() -> Unit)?)
-fun FlowContent.daisyLabelText(text: String, extraClasses?)
+fun FlowContent.daisyLabel(
+    text: String? = null,
+    extraClasses: String? = null,
+    attrs: (SPAN.() -> Unit)? = null,
+    content: (SPAN.() -> Unit)? = null,
+)
 ```
 
 ```kotlin
 daisyFieldset {
     daisyLabel {
-        daisyLabelText("Card number")
+        span("label-text") { +"Card number" }
         span("label-text text-base-content/50") { +"Required" }
     }
     daisyInput(extraClasses = "w-full font-mono")
@@ -518,15 +608,18 @@ Styled anchor elements. Renders `<a class="link ...">`.
 ```kotlin
 fun FlowContent.daisyLink(
     text: String? = null,
-    href: String? = null,
-    hover: Boolean = false,        // underline only on hover
-    extraClasses, attrs, content: (A.() -> Unit)?,
+    variant: LinkVariant? = null,    // Neutral | Primary | Secondary | Accent | Success | Info | Warning | Error
+    hover: Boolean = false,          // underline only on hover
+    extraClasses: String? = null,
+    attrs: (A.() -> Unit)? = null,
+    content: (A.() -> Unit)? = null,
 )
 ```
 
 ```kotlin
 daisyLink("View all repositories", hover = true, href = "/repos")
 daisyLink("Revenue report →", hover = true, extraClasses = "text-xs")
+daisyLink("Important", variant = LinkVariant.Primary)
 ```
 
 ---
@@ -538,7 +631,21 @@ daisyLink("Revenue report →", hover = true, extraClasses = "text-xs")
 Navigation lists with optional nested submenus. Renders `<ul class="menu">`.
 
 ```kotlin
-fun FlowContent.daisyMenu(extraClasses, attrs, content: (UL.() -> Unit))
+fun FlowContent.daisyMenu(
+    size: MenuSize? = null,          // Xs | Sm | Md | Lg | Xl
+    active: Boolean = false,
+    disabled: Boolean = false,
+    dropdownShow: Boolean = false,
+    focus: Boolean = false,
+    horizontal: Boolean = false,
+    vertical: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (UL.() -> Unit)? = null,
+    content: (UL.() -> Unit),
+)
+fun FlowContent.daisyMenuTitle(text: String? = null, extraClasses, attrs, content: (H2.() -> Unit)?)
+fun FlowContent.daisyMenuDropdown(extraClasses, attrs, content: (DIV.() -> Unit))
+fun FlowContent.daisyMenuDropdownToggle(extraClasses, attrs, content: (DIV.() -> Unit))
 ```
 
 ```kotlin
@@ -573,11 +680,13 @@ Single-choice option groups. Renders `<input type="radio" class="radio ...">`.
 
 ```kotlin
 fun FlowContent.daisyRadio(
+    variant: RadioVariant? = null,   // Primary | Secondary | Accent | Neutral | Success | Warning | Info | Error
+    size: RadioSize? = null,        // Xs | Sm | Md | Lg | Xl
     name: String? = null,
-    size: RadioSize? = null,     // Xs | Sm | Md | Lg
     checked: Boolean = false,
     disabled: Boolean = false,
-    extraClasses, attrs,
+    extraClasses: String? = null,
+    attrs: (INPUT.() -> Unit)? = null,
 )
 ```
 
@@ -600,13 +709,15 @@ Slider for numeric input. Renders `<input type="range" class="range ...">`.
 
 ```kotlin
 fun FlowContent.daisyRange(
-    size: RangeSize? = null,    // Xs | Sm | Md | Lg
+    variant: RangeVariant? = null,   // Primary | Secondary | Accent | Neutral | Success | Warning | Info | Error
+    size: RangeSize? = null,         // Xs | Sm | Md | Lg | Xl
     min: String? = null,
     max: String? = null,
     value: String? = null,
     step: String? = null,
     disabled: Boolean = false,
-    extraClasses, attrs,
+    extraClasses: String? = null,
+    attrs: (INPUT.() -> Unit)? = null,
 )
 ```
 
@@ -627,11 +738,12 @@ Dropdown option pickers. Renders `<select class="select ...">`.
 
 ```kotlin
 fun FlowContent.daisySelect(
-    size: SelectSize? = null,    // Xs | Sm | Md | Lg
+    variant: SelectVariant? = null,   // Neutral | Primary | Secondary | Accent | Info | Success | Warning | Error
+    size: SelectSize? = null,         // Xs | Sm | Md | Lg | Xl
     ghost: Boolean = false,
-    bordered: Boolean = false,
     disabled: Boolean = false,
-    extraClasses, attrs,
+    extraClasses: String? = null,
+    attrs: (SELECT.() -> Unit)? = null,
     content: (SELECT.() -> Unit),
 )
 ```
@@ -644,6 +756,10 @@ daisySelect(extraClasses = "w-full") {
     option { +"Developer" }
     option { +"Reporter" }
 }
+daisySelect(variant = SelectVariant.Primary, size = SelectSize.Sm) {
+    option { +"Option A" }
+    option { +"Option B" }
+}
 ```
 
 ---
@@ -655,29 +771,37 @@ daisySelect(extraClasses = "w-full") {
 Key metrics displayed in a horizontal or vertical strip. Renders `<div class="stats">`.
 
 ```kotlin
-fun FlowContent.daisyStats(vertical?, horizontal?, extraClasses, attrs, content: (DIV.() -> Unit))
-fun FlowContent.daisyStat(extraClasses, attrs, content: (DIV.() -> Unit))
-fun FlowContent.daisyStatTitle(text: String, extraClasses?)
-fun FlowContent.daisyStatValue(text: String, extraClasses?)
-fun FlowContent.daisyStatDesc(text: String, extraClasses?)
+fun FlowContent.daisyStat(
+    horizontal: Boolean = false,
+    vertical: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DIV.() -> Unit)? = null,
+    content: (DIV.() -> Unit),
+)
+fun FlowContent.daisyStatStat(extraClasses, attrs, content: (DIV.() -> Unit))
+fun FlowContent.daisyStatStatTitle(text: String? = null, extraClasses, attrs, content: (DIV.() -> Unit)?)
+fun FlowContent.daisyStatStatValue(text: String? = null, extraClasses, attrs, content: (DIV.() -> Unit)?)
+fun FlowContent.daisyStatStatDesc(text: String? = null, extraClasses, attrs, content: (DIV.() -> Unit)?)
+fun FlowContent.daisyStatStatFigure(extraClasses, attrs, content: (DIV.() -> Unit))
+fun FlowContent.daisyStatStatActions(extraClasses, attrs, content: (DIV.() -> Unit))
 ```
 
 ```kotlin
-daisyStats(horizontal = true, extraClasses = "shadow-xs") {
-    daisyStat {
-        daisyStatTitle("Active Repos")
-        daisyStatValue("142")
-        daisyStatDesc("Across all organizations")
+daisyStat(horizontal = true, extraClasses = "shadow-xs") {
+    daisyStatStat {
+        daisyStatStatTitle("Active Repos")
+        daisyStatStatValue("142")
+        daisyStatStatDesc("Across all organizations")
     }
-    daisyStat {
-        daisyStatTitle("Open Issues")
-        daisyStatValue("1,847")
-        daisyStatDesc("Live triage queue")
+    daisyStatStat {
+        daisyStatStatTitle("Open Issues")
+        daisyStatStatValue("1,847")
+        daisyStatStatDesc("Live triage queue")
     }
-    daisyStat {
-        daisyStatTitle("Pipeline Success Rate")
-        daisyStatValue("94.2%")
-        daisyStatDesc("Last 30 days")
+    daisyStatStat {
+        daisyStatStatTitle("Pipeline Success Rate")
+        daisyStatStatValue("94.2%")
+        daisyStatStatDesc("Last 30 days")
     }
 }
 ```
@@ -759,10 +883,12 @@ Switch-style boolean input. Renders `<input type="checkbox" class="toggle ...">`
 
 ```kotlin
 fun FlowContent.daisyToggle(
-    size: ToggleSize? = null,    // Xs | Sm | Md | Lg
+    variant: ToggleVariant? = null,   // Primary | Secondary | Accent | Neutral | Success | Warning | Info | Error
+    size: ToggleSize? = null,         // Xs | Sm | Md | Lg | Xl
     checked: Boolean = false,
     disabled: Boolean = false,
-    extraClasses, attrs,
+    extraClasses: String? = null,
+    attrs: (INPUT.() -> Unit)? = null,
 )
 ```
 
@@ -773,9 +899,53 @@ label("flex cursor-pointer justify-between") {
 }
 label("flex cursor-pointer justify-between") {
     span("label-text") { +"Allow force push" }
-    daisyToggle(size = ToggleSize.Sm)
+    daisyToggle(size = ToggleSize.Sm, variant = ToggleVariant.Primary)
 }
 ```
+
+---
+
+## Modal
+
+Modal dialogs. Renders `<dialog class="modal ...">`.
+
+```kotlin
+fun FlowContent.daisyModal(
+    bottom: Boolean = false,
+    end: Boolean = false,
+    middle: Boolean = false,
+    open: Boolean = false,
+    start: Boolean = false,
+    top: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DIALOG.() -> Unit)? = null,
+    content: (DIALOG.() -> Unit),
+)
+fun FlowContent.daisyModalBox(extraClasses, attrs, content: (DIV.() -> Unit))
+fun FlowContent.daisyModalAction(extraClasses, attrs, content: (DIV.() -> Unit))
+fun FlowContent.daisyModalBackdrop(extraClasses, attrs, content: (DIV.() -> Unit))
+```
+
+```kotlin
+// Modal with form
+daisyModal(open = true) {
+    daisyModalBox {
+        h3("text-lg font-bold") { +"Edit Profile" }
+        p("py-4") { +"Press ESC key or click the button below to close" }
+        daisyModalAction {
+            daisyButton("Close", variant = ButtonVariant.Ghost)
+        }
+    }
+    daisyModalBackdrop { }
+}
+// Centered modal
+daisyModal(middle = true) {
+    daisyModalBox { /* content */ }
+    daisyModalBackdrop { }
+}
+```
+
+Use `open = true` to show the modal. The `daisyModalBackdrop` provides the clickable overlay to close.
 
 ---
 

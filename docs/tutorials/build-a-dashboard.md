@@ -195,11 +195,17 @@ Before introducing htmx, let's render stats directly in the shell to make sure t
 ```kotlin
 // Inside the grid div, after shellHeader()
 section("stats stats-vertical xl:stats-horizontal bg-base-100 col-span-12 w-full shadow-xs") {
-    daisyStat {
-        daisyStatTitle("Page Views")
-        daisyStatValue("89,400")
-        daisyStatDesc("21% more than last month")
+    daisyStatStat {
+        daisyStatStatTitle("Page Views")
+        daisyStatStatValue("89,400")
+        daisyStatStatDesc("21% more than last month")
     }
+    daisyStatStat {
+        daisyStatStatTitle("Users")
+        daisyStatStatValue("1,200")
+        daisyStatStatDesc("12% increase")
+    }
+}
     daisyStat {
         daisyStatTitle("Users")
         daisyStatValue("1,200")
@@ -234,13 +240,19 @@ fun Route.dashboardRoutes() {
     }
     get("/fragments/stats") {
         call.respondHtmlFragment {
-            section {
-                addClassNames("stats stats-vertical xl:stats-horizontal bg-base-100 col-span-12 w-full shadow-xs")
-                daisyStat {
-                    daisyStatTitle("Page Views")
-                    daisyStatValue("89,400")
-                    daisyStatDesc("21% more than last month")
-                }
+section {
+    addClassNames("stats stats-vertical xl:stats-horizontal bg-base-100 col-span-12 w-full shadow-xs")
+    daisyStatStat {
+        daisyStatStatTitle("Page Views")
+        daisyStatStatValue("89,400")
+        daisyStatStatDesc("21% more than last month")
+    }
+    daisyStatStat {
+        daisyStatStatTitle("Users")
+        daisyStatStatValue("1,200")
+        daisyStatStatDesc("12% increase")
+    }
+}
                 daisyStat {
                     daisyStatTitle("Users")
                     daisyStatValue("1,200")

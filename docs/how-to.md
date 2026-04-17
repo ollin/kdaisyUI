@@ -252,9 +252,9 @@ get("/fragments/stats") {
     call.respondHtmlFragment {
         section {
             addClassNames("stats bg-base-100 col-span-12 w-full shadow-xs")
-            daisyStat {
-                daisyStatTitle("Page Views")
-                daisyStatValue("89,400")
+            daisyStatStat {
+                daisyStatStatTitle("Page Views")
+                daisyStatStatValue("89,400")
             }
         }
     }

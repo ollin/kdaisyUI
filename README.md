@@ -11,10 +11,10 @@ createHTML().div {
     daisyCard(extraClasses = "bg-base-100 shadow-xs") {
         daisyCardBody {
             daisyCardTitle("Revenue")
-            daisyStats {
-                daisyStat {
-                    daisyStatValue("21,500 USD")
-                    daisyStatDesc("21% more than last month")
+            daisyStat(horizontal = true) {
+                daisyStatStat {
+                    daisyStatStatValue("21,500 USD")
+                    daisyStatStatDesc("21% more than last month")
                 }
             }
             daisyButton("View report", variant = ButtonVariant.Primary)
