@@ -40,11 +40,57 @@ tasks.named("compileKotlin") {
     dependsOn(generateComponents)
 }
 
+// Sources JAR for Maven Central
+val sourcesJar by tasks.registering(Jar::class) {
+    dependsOn(tasks.named("generateComponents"))
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+
+// Javadoc JAR for Maven Central (empty for Kotlin, but required)
+val javadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+    dependsOn(tasks.javadoc)
+    from(tasks.javadoc.map { it.outputs.files })
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
             artifactId = "kdaisyui"
+            
+            // Attach sources and javadoc JARs
+            artifact(sourcesJar.get())
+            artifact(javadocJar.get())
+            
+            // POM metadata required for Maven Central
+            pom {
+                name.set("kdaisyui")
+                description.set("Type-safe DaisyUI component DSL for Kotlin server-rendered HTML")
+                url.set("https://github.com/ollin/kdaisyUI")
+                
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("https://opensource.org/licenses/MIT")
+                    }
+                }
+                
+                developers {
+                    developer {
+                        id.set("ollin")
+                        name.set("ollin")
+                        email.set("ollin@users.noreply.github.com")
+                    }
+                }
+                
+                scm {
+                    connection.set("scm:git:git://github.com/ollin/kdaisyUI.git")
+                    developerConnection.set("scm:git:ssh://github.com/ollin/kdaisyUI.git")
+                    url.set("https://github.com/ollin/kdaisyUI")
+                }
+            }
         }
     }
     repositories {
