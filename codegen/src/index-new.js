@@ -16,7 +16,7 @@ function loadConfig() {
 }
 
 function main() {
-  console.log('Generating kdaisyUI components from DaisyUI source...\n')
+  console.log('Generating kdaisyui components from DaisyUI source...\n')
   
   const config = loadConfig()
   const elementRules = parseLlmsTxt()

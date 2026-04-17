@@ -1,10 +1,10 @@
-# CODESEEKER.md - kdaisyUI
+# CODESEEKER.md - kdaisyui
 
 This file provides instructions to CodeSeeker for analyzing and working with this project.
 
 ## Project Overview
 
-**Project**: kdaisyUI
+**Project**: kdaisyui
 **Type**: api_service
 **Description**: Your project description here
 **Languages**: JavaScript, TypeScript

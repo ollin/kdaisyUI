@@ -5,7 +5,7 @@ In this tutorial we will build a full admin dashboard served by Ktor. The page l
 We will use three things:
 
 - **Ktor** serves HTML pages and fragments
-- **kdaisyUI** provides the component DSL
+- **kdaisyui** provides the component DSL
 - **htmx** makes the browser fetch fragments and swap them into the page
 
 ## What we will build
@@ -42,7 +42,7 @@ repositories {
 }
 
 dependencies {
-    // kdaisyUI (via composite build or local project)
+    // kdaisyui (via composite build or local project)
     implementation(project(":lib"))
 
     // Ktor server — current version: see example-app/build.gradle.kts → ktorVersion
@@ -339,7 +339,7 @@ htmx watches the viewport. When the user scrolls down and the placeholder become
 
 ## 10. Run the complete example
 
-The `example-app` module in the kdaisyUI repository contains a complete working dashboard with all sections, sidebar, and progressive loading. Run it:
+The `example-app` module in the kdaisyui repository contains a complete working dashboard with all sections, sidebar, and progressive loading. Run it:
 
 ```bash
 ./gradlew :example-app:run
@@ -365,7 +365,7 @@ And further down, the team management section:
 ## What you learned
 
 - **Ktor** serves both full pages (`respondHtml`) and fragments (`respondHtmlFragment`)
-- **kdaisyUI** generates DaisyUI markup from Kotlin — same components work in both full pages and fragments
+- **kdaisyui** generates DaisyUI markup from Kotlin — same components work in both full pages and fragments
 - **htmx** handles progressive loading with three attributes: `hx-get`, `hx-trigger`, `hx-swap`
 - `"load"` fetches immediately, `"revealed"` fetches on scroll
 - `"outerHTML"` swap replaces the placeholder cleanly

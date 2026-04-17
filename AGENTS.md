@@ -1,4 +1,4 @@
-# kdaisyUI Project Knowledge Base
+# kdaisyui Project Knowledge Base
 
 **Generated:** 2026-03-29 · **Updated:** 2026-03-29
 **Stack:** Kotlin 2.3.x + Gradle 9.x + kotlinx.html + DaisyUI
@@ -10,7 +10,7 @@ Type-safe DaisyUI component DSL for Kotlin server-rendered HTML. Wraps Tailwind 
 ## STRUCTURE
 
 ```
-kdaisyUI/
+kdaisyui/
 ├── lib/                    # Core DSL library (publishable)
 │   └── src/main/kotlin/com/github/ollin/kdaisyui/
 │       ├── components/     # 63 DaisyUI component wrappers
@@ -141,7 +141,7 @@ Versioning is fully automated via [release-please](https://github.com/googleapis
 
 **BEFORE any code search**, verify the project is indexed:
 1. Call `mcp_codeseeker_codeseeker` with `action: "index"`, `op: "status"` to see indexed projects
-2. If this project is NOT listed, call with `action: "index"`, `op: "init"`, `path: "/home/ollin/dev/src/github.com/ollin/kdaisyUI"` first
+2. If this project is NOT listed, call with `action: "index"`, `op: "init"`, `path: "/home/ollin/dev/src/github.com/ollin/kdaisyui"` first
 3. If tools return "Not connected", the MCP server may need restart
 
 ### When to Use CodeSeeker (DEFAULT)

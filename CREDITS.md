@@ -6,7 +6,7 @@
 
 DaisyUI does something genuinely hard: it takes Tailwind CSS — a utility-first framework that produces verbose, hard-to-read class strings — and turns it into a semantic component system. Instead of `class="flex items-center justify-between px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700"`, you write `class="btn btn-primary"`. That is a meaningful abstraction, done right.
 
-kdaisyUI exists because DaisyUI exists. The entire point of this library is to bring DaisyUI's semantic component model into Kotlin's type system — so that `btn-primary` becomes `ButtonVariant.Primary` and the compiler catches mistakes that CSS class strings cannot.
+kdaisyui exists because DaisyUI exists. The entire point of this library is to bring DaisyUI's semantic component model into Kotlin's type system — so that `btn-primary` becomes `ButtonVariant.Primary` and the compiler catches mistakes that CSS class strings cannot.
 
 ## Tailwind CSS
 
