@@ -1,10 +1,10 @@
-# kdaisyUI
+# kdaisyui
 
 Type-safe [DaisyUI](https://daisyui.com/) components for [kotlinx.html](https://github.com/Kotlin/kotlinx.html).
 
 Write DaisyUI markup in Kotlin with autocompletion, compile-time checks, and zero class-name typos.
 
-![DevTrack — example app built with kdaisyUI](docs/screenshots/overview.png)
+![DevTrack — example app built with kdaisyui](docs/screenshots/overview.png)
 
 ```kotlin
 createHTML().div {
@@ -53,7 +53,7 @@ This project follows the [Diátaxis](https://diataxis.fr/) documentation framewo
 // build.gradle.kts
 repositories {
     mavenCentral()
-    maven("https://maven.pkg.github.com/ollin/kdaisyUI")
+    maven("https://maven.pkg.github.com/ollin/kdaisyui")
 }
 
 dependencies {
@@ -90,7 +90,7 @@ val html = createHTML().div {
 Open in any Dev Container-compatible editor (VS Code, IntelliJ, GitHub Codespaces):
 
 ```bash
-git clone https://github.com/ollin/kdaisyUI
+git clone https://github.com/ollin/kdaisyui
 # Open in VS Code → "Reopen in Container"
 ```
 
@@ -99,8 +99,8 @@ The container provides JDK, Gradle, Node, and Playwright Chromium pre-installed 
 ### Option B — Local with asdf
 
 ```bash
-git clone https://github.com/ollin/kdaisyUI
-cd kdaisyUI
+git clone https://github.com/ollin/kdaisyui
+cd kdaisyui
 asdf install   # reads .tool-versions — installs JDK, Gradle, Node, just
 just test      # run unit tests
 just dev       # start dev server → http://localhost:8080

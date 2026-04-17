@@ -68,7 +68,7 @@ publishing {
             pom {
                 name.set("kdaisyui")
                 description.set("Type-safe DaisyUI component DSL for Kotlin server-rendered HTML")
-                url.set("https://github.com/ollin/kdaisyUI")
+                url.set("https://github.com/ollin/kdaisyui")
                 
                 licenses {
                     license {
@@ -86,9 +86,9 @@ publishing {
                 }
                 
                 scm {
-                    connection.set("scm:git:git://github.com/ollin/kdaisyUI.git")
-                    developerConnection.set("scm:git:ssh://github.com/ollin/kdaisyUI.git")
-                    url.set("https://github.com/ollin/kdaisyUI")
+                    connection.set("scm:git:git://github.com/ollin/kdaisyui.git")
+                    developerConnection.set("scm:git:ssh://github.com/ollin/kdaisyui.git")
+                    url.set("https://github.com/ollin/kdaisyui")
                 }
             }
         }
@@ -96,7 +96,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ollin/kdaisyUI")
+            url = uri("https://maven.pkg.github.com/ollin/kdaisyui")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")

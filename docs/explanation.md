@@ -1,4 +1,4 @@
-# Understanding kdaisyUI
+# Understanding kdaisyui
 
 Background concepts, design decisions, and how the pieces fit together.
 
@@ -50,12 +50,12 @@ Three attributes cover most use cases:
 
 This fits naturally with server-rendered Kotlin applications: the server already produces HTML, and htmx lets you send smaller fragments instead of full pages.
 
-## Why kdaisyUI exists
+## Why kdaisyui exists
 
 Using DaisyUI with kotlinx.html directly works, but it's verbose and error-prone:
 
 ```kotlin
-// Without kdaisyUI — manual class strings
+// Without kdaisyui — manual class strings
 button {
     classes = setOf("btn", "btn-primary", "btn-lg")
     +"Save"
@@ -69,10 +69,10 @@ Problems with this approach:
 - **No semantic API**: the intent ("primary large button") is hidden in class strings
 - **Class merging is fragile**: combining classes from multiple sources can produce duplicates or clobber the `class` attribute
 
-kdaisyUI solves all four:
+kdaisyui solves all four:
 
 ```kotlin
-// With kdaisyUI — typed, composable, correct
+// With kdaisyui — typed, composable, correct
 daisyButton("Save", variant = ButtonVariant.Primary, size = ButtonSize.Lg)
 ```
 
@@ -100,7 +100,7 @@ This means you can safely add Tailwind utilities, custom classes, or any CSS cla
 
 ## Architecture: thin wrappers, not abstractions
 
-Each kdaisyUI component function is a thin wrapper around the corresponding HTML tag:
+Each kdaisyui component function is a thin wrapper around the corresponding HTML tag:
 
 - `daisyButton` calls `button { }` and adds `class="btn ..."`
 - `daisyCard` calls `div { }` and adds `class="card ..."`
@@ -112,7 +112,7 @@ This design has consequences:
 
 - **Zero runtime overhead**: the wrappers execute during HTML generation, producing the same output as hand-written kotlinx.html
 - **Full kotlinx.html compatibility**: you can mix DSL components with raw kotlinx.html freely
-- **No lock-in**: if kdaisyUI doesn't support something, you drop to raw kotlinx.html
+- **No lock-in**: if kdaisyui doesn't support something, you drop to raw kotlinx.html
 
 ## The escape hatch pattern
 
@@ -138,14 +138,14 @@ The escape hatches ensure the DSL never limits you:
 - **`attrs`**: set `id`, `data-*` attributes, event handlers — anything the raw tag supports
 - **`content`**: nest arbitrary HTML inside the component — icons, images, other components
 
-If DaisyUI adds a new modifier tomorrow, you can use it immediately via `extraClasses` without waiting for a kdaisyUI update.
+If DaisyUI adds a new modifier tomorrow, you can use it immediately via `extraClasses` without waiting for a kdaisyui update.
 
-## How it fits together: Ktor + kdaisyUI + htmx
+## How it fits together: Ktor + kdaisyui + htmx
 
 The three technologies form a clean server-rendering stack:
 
 ```
-Browser ──── htmx ────► Ktor server ──── kotlinx.html + kdaisyUI ────► HTML
+Browser ──── htmx ────► Ktor server ──── kotlinx.html + kdaisyui ────► HTML
   │                        │
   │  hx-get="/stats"       │  call.respondHtml { daisyStats { ... } }
   │  ◄── HTML fragment ────│
@@ -155,11 +155,11 @@ Browser ──── htmx ────► Ktor server ──── kotlinx.html 
 
 1. **Ktor** handles HTTP routing and request/response
 2. **kotlinx.html** provides the type-safe HTML builder
-3. **kdaisyUI** adds DaisyUI component wrappers on top of kotlinx.html
+3. **kdaisyui** adds DaisyUI component wrappers on top of kotlinx.html
 4. **htmx** on the client triggers requests and swaps HTML fragments
 
 The server is the single source of truth for all UI rendering. There is no client-side state, no client-side routing, no JavaScript build step. The browser receives HTML and displays it.
 
 The result is a fully styled, interactive application rendered entirely on the server — the DevTrack example app included in this repository:
 
-![DevTrack — full page rendered by Ktor + kdaisyUI + htmx](screenshots/full-page.png)
+![DevTrack — full page rendered by Ktor + kdaisyui + htmx](screenshots/full-page.png)

@@ -1,4 +1,4 @@
-# kdaisyUI — task runner
+# kdaisyui — task runner
 # Run `just` or `just --list` to see all available recipes.
 # Requires: just (see .tool-versions), JDK, Node.js
 

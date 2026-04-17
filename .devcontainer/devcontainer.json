@@ -1,5 +1,5 @@
 {
-  "name": "kdaisyUI",
+  "name": "kdaisyui",
   "image": "mcr.microsoft.com/devcontainers/java:25-bookworm",
 
   "features": {

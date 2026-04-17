@@ -1,4 +1,4 @@
-# Getting started with kdaisyUI
+# Getting started with kdaisyui
 
 In this tutorial we will render our first DaisyUI components from Kotlin. By the end you will have a small program that generates a styled card with stats, a form, and buttons — all type-safe, all from Kotlin.
 
@@ -16,7 +16,7 @@ Create a new directory and add the minimal Gradle files.
 
 ```kotlin
 rootProject.name = "my-app"
-includeBuild("../kdaisyUI")   // point to where you cloned kdaisyUI
+includeBuild("../kdaisyui")   // point to where you cloned kdaisyui
 ```
 
 **build.gradle.kts**
@@ -39,7 +39,7 @@ dependencies {
 ```
 
 > Replace `«versions.kotlin»` and `«versions.kotlinx-html»` with the values from
-> [`gradle.properties`](../../gradle.properties) in the kdaisyUI repository.
+> [`gradle.properties`](../../gradle.properties) in the kdaisyui repository.
 
 Run `./gradlew build` to verify everything resolves.
 
@@ -72,7 +72,7 @@ You should see:
 <div><button class="btn btn-primary">Click me</button></div>
 ```
 
-`createHTML()` is a kotlinx.html function that renders HTML to a String. `daisyButton` is a kdaisyUI extension function that generates a `<button>` with the correct DaisyUI classes.
+`createHTML()` is a kotlinx.html function that renders HTML to a String. `daisyButton` is a kdaisyui extension function that generates a `<button>` with the correct DaisyUI classes.
 
 ## 3. Add variants and sizes
 
@@ -211,7 +211,7 @@ Output:
 ## What you learned
 
 - `createHTML()` renders kotlinx.html to a String
-- Every kdaisyUI component is a `FlowContent` extension function — it works anywhere in kotlinx.html
+- Every kdaisyui component is a `FlowContent` extension function — it works anywhere in kotlinx.html
 - Components accept typed parameters (enums for variants/sizes, booleans for modifiers)
 - `extraClasses` lets you add any CSS class (Tailwind utilities, custom classes)
 - Components compose by nesting, just like HTML
@@ -220,6 +220,6 @@ Output:
 
 Now that you can render components, let's build a real application. Continue with [Build a dashboard with Ktor and htmx](build-a-dashboard.md) to serve these components from a web server with progressive loading.
 
-Here is what a full application built with kdaisyUI looks like — the DevTrack example app included in this repository:
+Here is what a full application built with kdaisyui looks like — the DevTrack example app included in this repository:
 
-![DevTrack dashboard built with kdaisyUI](../screenshots/overview.png)
+![DevTrack dashboard built with kdaisyui](../screenshots/overview.png)

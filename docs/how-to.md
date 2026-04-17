@@ -1,6 +1,6 @@
 # How-to guides
 
-Task-oriented recipes for common goals. Each guide assumes you have kdaisyUI set up and know the basics.
+Task-oriented recipes for common goals. Each guide assumes you have kdaisyui set up and know the basics.
 
 ## Set up a development environment
 
@@ -9,7 +9,7 @@ Task-oriented recipes for common goals. Each guide assumes you have kdaisyUI set
 Clone the repository and open it in a Dev Container-compatible editor. The container definition is in `.devcontainer/devcontainer.json` and provides everything pre-installed:
 
 ```bash
-git clone https://github.com/ollin/kdaisyUI
+git clone https://github.com/ollin/kdaisyui
 # VS Code: "Reopen in Container"
 # IntelliJ: Dev Containers plugin → "Open Folder in Container"
 # GitHub Codespaces: "Code" → "Open with Codespaces"
@@ -26,8 +26,8 @@ After the container starts, port 8080 is forwarded automatically. Run the exampl
 The repository ships a `.tool-versions` file that pins the exact versions of JDK, Gradle, and Node used in development:
 
 ```bash
-git clone https://github.com/ollin/kdaisyUI
-cd kdaisyUI
+git clone https://github.com/ollin/kdaisyui
+cd kdaisyui
 asdf install    # installs exact versions from .tool-versions
 ./gradlew :lib:test
 ```
@@ -46,8 +46,8 @@ asdf install
 The Gradle wrapper (`./gradlew`) downloads Gradle automatically (exact version in [`gradle/wrapper/gradle-wrapper.properties`](../gradle/wrapper/gradle-wrapper.properties)). You only need a JDK 21 or newer on your `PATH`:
 
 ```bash
-git clone https://github.com/ollin/kdaisyUI
-cd kdaisyUI
+git clone https://github.com/ollin/kdaisyui
+cd kdaisyui
 ./gradlew :lib:test
 ```
 
