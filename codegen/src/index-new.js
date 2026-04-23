@@ -64,6 +64,7 @@ function main() {
     const kotlin = generateKotlinFile(classified, { primaryElement: element }, config)
     const outFile = path.join(OUTPUT_DIR, `${classified.componentName}.kt`)
     
+    fs.mkdirSync(OUTPUT_DIR, { recursive: true })
     fs.writeFileSync(outFile, kotlin)
     console.log(`  ✓ ${classified.componentName}.kt (${element})`)
     generated++
