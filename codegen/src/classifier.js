@@ -1,4 +1,4 @@
-import { toPascalCase as toPascalCaseBase, getBaseClass, getClassesByCategory, getDefaultSize } from './parser/frontmatter.js'
+import { toPascalCase as toPascalCaseBase, getBaseClass, getClassesByCategory, getEntriesByCategory, getDefaultSize } from './parser/frontmatter.js'
 
 export function toPascalCase(name) {
   return toPascalCaseBase(name)
@@ -7,6 +7,7 @@ export function toPascalCase(name) {
 /**
  * @typedef {Object} ClassifiedComponent
  * @property {string} componentName - PascalCase component name (e.g., 'Button')
+ * @property {string} desc - Component description from frontmatter
  * @property {string} prefix - CSS prefix (e.g., 'btn')
  * @property {string[]} colors - Color variants
  * @property {string[]} styles - Style variants
@@ -17,6 +18,7 @@ export function toPascalCase(name) {
  * @property {string[]} directions - Direction variants
  * @property {string[]} placements - Placement variants
  * @property {string|null} defaultSize - Default size class
+ * @property {Record<string, string>} descs - Maps stripped class name → description
  */
 
 /**
@@ -29,10 +31,13 @@ export function classifyFromFrontmatter(frontmatter, componentName) {
   const classnames = frontmatter.classnames
   const prefix = getBaseClass(classnames)
   const componentClass = prefix || componentName
-  
+
+  const descs = buildDescMap(classnames, prefix)
+
   return {
     componentName: toPascalCase(componentName),
     componentClass: toPascalCase(componentClass),
+    desc: frontmatter.desc || '',
     prefix,
     colors: getClassesByCategory(classnames, 'color').map(stripPrefix(prefix)),
     styles: getClassesByCategory(classnames, 'style').map(stripPrefix(prefix)),
@@ -42,8 +47,25 @@ export function classifyFromFrontmatter(frontmatter, componentName) {
     parts: getClassesByCategory(classnames, 'part'),
     directions: getClassesByCategory(classnames, 'direction').map(stripPrefix(prefix)),
     placements: getClassesByCategory(classnames, 'placement').map(stripPrefix(prefix)),
-    defaultSize: getDefaultSize(classnames)
+    defaultSize: getDefaultSize(classnames),
+    descs,
   }
+}
+
+function buildDescMap(classnames, prefix) {
+  const descs = {}
+  const categories = ['component', 'color', 'style', 'size', 'modifier', 'behavior', 'part', 'direction', 'placement']
+  for (const cat of categories) {
+    const entries = getEntriesByCategory(classnames, cat)
+    for (const entry of entries) {
+      if (!entry.desc) continue
+      const key = entry.class.startsWith(prefix + '-')
+        ? entry.class.slice(prefix.length + 1)
+        : entry.class
+      descs[key] = entry.desc
+    }
+  }
+  return descs
 }
 
 function stripPrefix(prefix) {

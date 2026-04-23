@@ -173,7 +173,7 @@ export function getBaseClass(classnames) {
 }
 
 /**
- * Get classes by category
+ * Get classes by category (class names only)
  * @param {Classnames} classnames
  * @param {string} category
  * @returns {string[]}
@@ -184,6 +184,21 @@ export function getClassesByCategory(classnames, category) {
     const cls = entry.class
     return cls.replace(/^['"]|['"]$/g, '')
   })
+}
+
+/**
+ * Get full entries by category (class name + description + default flag)
+ * @param {Classnames} classnames
+ * @param {string} category
+ * @returns {Array<{class: string, desc: string, default?: boolean}>}
+ */
+export function getEntriesByCategory(classnames, category) {
+  if (!classnames?.[category]) return []
+  return classnames[category].map(entry => ({
+    class: (entry.class || '').replace(/^['"]|['"]$/g, ''),
+    desc: (entry.desc || '').replace(/^['"]|['"]$/g, ''),
+    ...(entry.default != null ? { default: entry.default } : {}),
+  }))
 }
 
 export function getDefaultSize(classnames) {

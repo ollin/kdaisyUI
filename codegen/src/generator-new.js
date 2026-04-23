@@ -15,20 +15,30 @@ function htmlTagFor(element) {
   return exceptions[element] ?? element.toLowerCase()
 }
 
-function generateEnum(enumName, prefix, values) {
+function generateEnum(enumName, prefix, values, descs, categoryLabel) {
   if (!values || values.length === 0) return ''
-  const entries = values.map(v => `    ${toPascalCase(v)}("${prefix}-${v}"),`).join('\n')
-  return `enum class ${enumName}(internal val className: String) {\n${entries}\n}\n`
+  const kdoc = descs && Object.keys(descs).length > 0
+    ? `/** ${categoryLabel} for this component (CSS prefix: \`${prefix}-\`) */\n`
+    : ''
+  const entries = values.map(v => {
+    const desc = descs?.[v]
+    const cssClass = `${prefix}-${v}`
+    const entryLine = `    ${toPascalCase(v)}("${cssClass}"),`
+    const kdocParts = [`CSS: \`${cssClass}\``]
+    if (desc) kdocParts.push(desc)
+    return `    /** ${kdocParts.join(' — ')} */\n${entryLine}`
+  }).join('\n')
+  return `${kdoc}enum class ${enumName}(internal val className: String) {\n${entries}\n}\n`
 }
 
 function generateVariantEnum(classified) {
   if (classified.colors.length === 0) return ''
-  return generateEnum(`${classified.componentName}Variant`, classified.prefix, classified.colors)
+  return generateEnum(`${classified.componentName}Variant`, classified.prefix, classified.colors, classified.descs, 'Color variants')
 }
 
 function generateSizeEnum(classified) {
   if (classified.sizes.length === 0) return ''
-  return generateEnum(`${classified.componentName}Size`, classified.prefix, classified.sizes)
+  return generateEnum(`${classified.componentName}Size`, classified.prefix, classified.sizes, classified.descs, 'Size variants')
 }
 
 function getAllBooleanParams(classified, extras, config, componentName) {
@@ -72,7 +82,7 @@ function getAllBooleanParams(classified, extras, config, componentName) {
 }
 
 function generateMainFunction(classified, element, config) {
-  const { componentName, prefix } = classified
+  const { componentName, prefix, desc, descs } = classified
   const htmlTag = htmlTagFor(element)
   const extras = config?.extras?.[classified.componentName.toLowerCase()] || []
   const booleans = getAllBooleanParams(classified, extras, config, componentName)
@@ -81,6 +91,8 @@ function generateMainFunction(classified, element, config) {
   const role = config?.roles?.[classified.componentName.toLowerCase()]
   const fixedInputType = config?.inputTypes?.[classified.componentName.toLowerCase()]
   
+  const kdoc = generateFunctionKdoc(classified, element, { booleans, extras, hasTextParam, noContent })
+
   const params = []
   if (hasTextParam) params.push('    text: String? = null,')
   if (classified.colors.length > 0) {
@@ -109,7 +121,51 @@ function generateMainFunction(classified, element, config) {
   
   const body = generateFunctionBody(classified, element, { extras, role, fixedInputType, hasTextParam, booleans, noContent })
   
-  return `fun FlowContent.daisy${componentName}(\n${params.join('\n')}\n) {\n    ${htmlTag} {\n${body}\n    }\n}`
+  return `${kdoc}fun FlowContent.daisy${componentName}(\n${params.join('\n')}\n) {\n    ${htmlTag} {\n${body}\n    }\n}`
+}
+
+function generateFunctionKdoc(classified, element, options) {
+  const { componentName, desc, descs, prefix } = classified
+  const { booleans, extras, hasTextParam, noContent } = options
+  const htmlTag = htmlTagFor(element)
+  const lines = []
+
+  const firstLine = desc
+    ? `${desc} Renders \`<${htmlTag} class="${prefix} ...">\`.`
+    : `Renders \`<${htmlTag} class="${prefix} ...">\`.`
+  lines.push(firstLine)
+
+  if (hasTextParam) {
+    lines.push('@param text — Shortcut for inline text content (mutually exclusive with [content])')
+  }
+  if (classified.colors.length > 0) {
+    lines.push(`@param variant — Color variant`)
+  }
+  if (classified.sizes.length > 0) {
+    lines.push(`@param size — Size variant`)
+  }
+  for (const b of booleans) {
+    const bDesc = descs?.[b]
+    const paramName = escapeKotlinKeyword(toCamelCase(b))
+    lines.push(bDesc ? `@param ${paramName} — ${bDesc}` : `@param ${paramName}`)
+  }
+  for (const extra of extras) {
+    lines.push(`@param ${extra.name}`)
+  }
+  lines.push('@param extraClasses — Additional CSS classes appended after the generated ones')
+  lines.push('@param attrs — Direct access to the underlying kotlinx.html tag attributes')
+  if (!noContent) {
+    if (hasTextParam) {
+      lines.push('@param content — Nested HTML content (takes precedence over [text] if both are set)')
+    } else {
+      lines.push('@param content — Nested HTML content')
+    }
+  }
+
+  if (lines.length === 1) {
+    return `/** ${lines[0]} */\n`
+  }
+  return `/**\n * ${lines.join('\n * ')}\n */\n`
 }
 
 function generateFunctionBody(classified, element, options) {
@@ -171,7 +227,13 @@ function generatePartFunction(classified, partClass, element, config) {
   const partPascal = toPascalCase(stripClassPrefix(classified.prefix, partClass))
   const htmlTag = htmlTagFor(element)
   const hasTextParam = config?.textParams?.includes(partClass) || partClass.includes('title')
-  
+  const partDesc = classified.descs?.[partClass] || ''
+
+  const kdocLine = partDesc
+    ? `${partDesc} Renders \`<${htmlTag} class="${partClass} ...">\`.`
+    : `Renders \`<${htmlTag} class="${partClass} ...">\`.`
+  const kdoc = `/** ${kdocLine} */\n`
+
   const params = []
   if (hasTextParam) params.push('    text: String? = null,')
   params.push('    extraClasses: String? = null,')
@@ -196,7 +258,7 @@ function generatePartFunction(classified, partClass, element, config) {
     body.push(`        content()`)
   }
   
-  return `fun FlowContent.daisy${componentName}${partPascal}(\n${params.join('\n')}\n) {\n    ${htmlTag} {\n${body.join('\n')}\n    }\n}`
+  return `${kdoc}fun FlowContent.daisy${componentName}${partPascal}(\n${params.join('\n')}\n) {\n    ${htmlTag} {\n${body.join('\n')}\n    }\n}`
 }
 
 function stripClassPrefix(prefix, className) {
