@@ -12,6 +12,43 @@ repositories {
     mavenCentral()
 }
 
+// --- DaisyUI submodule tag checkout ---
+
+val daisyuiVersion = project.property("daisyui.version").toString()
+
+abstract class CheckoutDaisyuiTag : DefaultTask() {
+    @get:Inject
+    abstract val execOperations: ExecOperations
+
+    @get:Input
+    abstract val targetTag: Property<String>
+
+    @get:InputDirectory
+    abstract val daisyuiDir: DirectoryProperty
+
+    @TaskAction
+    fun checkout() {
+        val tag = targetTag.get()
+        logger.lifecycle("Ensuring DaisyUI submodule is on tag $tag...")
+        execOperations.exec {
+            workingDir = daisyuiDir.get().asFile
+            commandLine("git", "fetch", "--tags", "--quiet")
+        }
+        execOperations.exec {
+            workingDir = daisyuiDir.get().asFile
+            commandLine("git", "checkout", tag, "--quiet")
+        }
+        logger.lifecycle("DaisyUI submodule is on tag $tag")
+    }
+}
+
+val checkoutDaisyuiTag = tasks.register<CheckoutDaisyuiTag>("checkoutDaisyuiTag") {
+    group = "daisyui"
+    description = "Checkout DaisyUI git submodule to tag v$daisyuiVersion"
+    targetTag.set("v$daisyuiVersion")
+    daisyuiDir.set(rootProject.layout.projectDirectory.dir("daisyui"))
+}
+
 // --- Generated sources from DaisyUI codegen ---
 
 val generatedMainDir = layout.buildDirectory.dir("generated/sources/kotlin/main")
@@ -41,6 +78,7 @@ testing {
 val generateComponents = tasks.register<Exec>("generateComponents") {
     group = "codegen"
     description = "Regenerate Kotlin components from DaisyUI source (git submodule)"
+    dependsOn(checkoutDaisyuiTag)
     workingDir = rootProject.file("codegen")
     val outputDir = generatedMainDir.map { it.dir("io/github/ollin/kdaisyui/components") }
     doFirst { outputDir.get().asFile.mkdirs() }
@@ -55,6 +93,7 @@ val generateComponents = tasks.register<Exec>("generateComponents") {
 val generateComponentTests = tasks.register<Exec>("generateComponentTests") {
     group = "codegen"
     description = "Regenerate Kotlin component tests from DaisyUI source (git submodule)"
+    dependsOn(checkoutDaisyuiTag)
     workingDir = rootProject.file("codegen")
     val outputDir = generatedTestDir.map { it.dir("io/github/ollin/kdaisyui/components") }
     doFirst { outputDir.get().asFile.mkdirs() }

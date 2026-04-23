@@ -15,6 +15,10 @@ build:
 generate:
     cd codegen && npm install && npm run generate
 
+# Sync DaisyUI submodule to the tag matching daisyui.version in gradle.properties
+sync-daisyui:
+    ./gradlew :lib:checkoutDaisyuiTag
+
 # Clean all build artifacts
 clean:
     ./gradlew clean
