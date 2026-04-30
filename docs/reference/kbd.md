@@ -1,0 +1,14 @@
+# Kbd
+
+Keyboard key display. Renders `<kbd class="kbd ...">`.
+
+```kotlin
+// KbdSize: Xs | Sm | Md | Lg | Xl
+fun FlowContent.daisyKbd(
+    text: String? = null,
+    size: KbdSize? = null,
+    extraClasses: String? = null,
+    attrs: (KBD.() -> Unit)? = null,
+    content: (KBD.() -> Unit)? = null,
+)
+```

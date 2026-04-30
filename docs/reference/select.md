@@ -1,0 +1,16 @@
+# Select
+
+Dropdown option pickers. Renders `<select class="select ...">`.
+
+```kotlin
+// SelectVariant: Neutral | Primary | Secondary | Accent | Info | Success | Warning | Error, SelectSize: Xs | Sm | Md | Lg | Xl
+fun FlowContent.daisySelect(
+    variant: SelectVariant? = null,
+    size: SelectSize? = null,
+    ghost: Boolean = false,
+    disabled: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (SELECT.() -> Unit)? = null,
+    content: (SELECT.() -> Unit),
+)
+```
