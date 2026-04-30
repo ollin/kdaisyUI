@@ -1,5 +1,7 @@
 # MockupPhone
 
+[DaisyUI documentation →](https://daisyui.com/components/mockup-phone/)
+
 Phone mockup frame. Renders `<div class="mockup-phone ...">`.
 
 ```kotlin

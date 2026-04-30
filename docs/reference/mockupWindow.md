@@ -1,5 +1,7 @@
 # MockupWindow
 
+[DaisyUI documentation →](https://daisyui.com/components/mockup-window/)
+
 Desktop window mockup frame. Renders `<div class="mockup-window ...">`.
 
 ```kotlin

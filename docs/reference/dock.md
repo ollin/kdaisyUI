@@ -1,5 +1,7 @@
 # Dock
 
+[DaisyUI documentation →](https://daisyui.com/components/dock/)
+
 macOS-style dock navigation. Renders `<div class="dock ...">`.
 
 ```kotlin

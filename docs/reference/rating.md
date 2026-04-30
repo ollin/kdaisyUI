@@ -1,5 +1,7 @@
 # Rating
 
+[DaisyUI documentation →](https://daisyui.com/components/rating/)
+
 Star rating input. Renders `<div class="rating ...">`.
 
 ```kotlin

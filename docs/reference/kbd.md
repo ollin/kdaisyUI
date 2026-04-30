@@ -1,5 +1,7 @@
 # Kbd
 
+[DaisyUI documentation →](https://daisyui.com/components/kbd/)
+
 Keyboard key display. Renders `<kbd class="kbd ...">`.
 
 ```kotlin

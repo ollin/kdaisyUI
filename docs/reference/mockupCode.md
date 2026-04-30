@@ -1,5 +1,7 @@
 # MockupCode
 
+[DaisyUI documentation →](https://daisyui.com/components/mockup-code/)
+
 Code block mockup frame. Renders `<div class="mockup-code ...">`.
 
 ```kotlin

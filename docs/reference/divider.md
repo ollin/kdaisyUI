@@ -1,5 +1,7 @@
 # Divider
 
+[DaisyUI documentation →](https://daisyui.com/components/divider/)
+
 Visual separator between sections. Renders `<div class="divider ...">`.
 
 ```kotlin

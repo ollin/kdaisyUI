@@ -1,5 +1,7 @@
 # Alert
 
+[DaisyUI documentation →](https://daisyui.com/components/alert/)
+
 Status messages and notifications. Renders `<div class="alert ...">`.
 
 ```kotlin

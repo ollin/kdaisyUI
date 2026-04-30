@@ -1,5 +1,7 @@
 # Navbar
 
+[DaisyUI documentation →](https://daisyui.com/components/navbar/)
+
 Navigation bar layout. Renders `<div class="navbar ...">`.
 
 ```kotlin

@@ -1,5 +1,7 @@
 # Table
 
+[DaisyUI documentation →](https://daisyui.com/components/table/)
+
 Structured data in rows and columns. Renders `<table class="table ...">`.
 
 ```kotlin

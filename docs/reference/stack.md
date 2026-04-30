@@ -1,5 +1,7 @@
 # Stack
 
+[DaisyUI documentation →](https://daisyui.com/components/stack/)
+
 Stack overlapping elements. Renders `<div class="stack ...">`.
 
 ```kotlin

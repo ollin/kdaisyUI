@@ -1,5 +1,7 @@
 # MockupBrowser
 
+[DaisyUI documentation →](https://daisyui.com/components/mockup-browser/)
+
 Browser window mockup frame. Renders `<div class="mockup-browser ...">`.
 
 ```kotlin

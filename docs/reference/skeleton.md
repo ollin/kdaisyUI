@@ -1,5 +1,7 @@
 # Skeleton
 
+[DaisyUI documentation →](https://daisyui.com/components/skeleton/)
+
 Content placeholder loading indicator. Renders `<div class="skeleton ...">`.
 
 ```kotlin

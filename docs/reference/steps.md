@@ -1,5 +1,7 @@
 # Steps
 
+[DaisyUI documentation →](https://daisyui.com/components/steps/)
+
 Step-by-step progress indicator. Renders `<ul class="steps ...">`.
 
 ```kotlin

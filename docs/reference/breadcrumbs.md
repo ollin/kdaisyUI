@@ -1,5 +1,7 @@
 # Breadcrumbs
 
+[DaisyUI documentation →](https://daisyui.com/components/breadcrumbs/)
+
 Navigation trail showing current location. Renders `<div class="breadcrumbs ...">`.
 
 ```kotlin

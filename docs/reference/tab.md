@@ -1,5 +1,7 @@
 # Tab
 
+[DaisyUI documentation →](https://daisyui.com/components/tab/)
+
 Tabbed navigation. Renders `<button class="tab ...">`.
 
 ```kotlin

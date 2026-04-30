@@ -1,5 +1,7 @@
 # HoverGallery
 
+[DaisyUI documentation →](https://daisyui.com/components/hover-gallery/)
+
 Gallery with hover effects. Renders `<figure class="hover-gallery ...">`.
 
 ```kotlin

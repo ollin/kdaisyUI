@@ -1,5 +1,7 @@
 # Mask
 
+[DaisyUI documentation →](https://daisyui.com/components/mask/)
+
 CSS masks for cropping images to shapes. Renders `<img class="mask ...">`.
 
 ```kotlin

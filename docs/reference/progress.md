@@ -1,5 +1,7 @@
 # Progress
 
+[DaisyUI documentation →](https://daisyui.com/components/progress/)
+
 Progress bar indicator. Renders `<progress class="progress ...">`.
 
 ```kotlin

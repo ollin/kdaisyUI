@@ -1,5 +1,7 @@
 # Menu
 
+[DaisyUI documentation →](https://daisyui.com/components/menu/)
+
 Navigation lists with submenus. Renders `<ul class="menu ...">`.
 
 ```kotlin

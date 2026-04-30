@@ -1,5 +1,7 @@
 # Footer
 
+[DaisyUI documentation →](https://daisyui.com/components/footer/)
+
 Page footer layout. Renders `<footer class="footer ...">`.
 
 ```kotlin

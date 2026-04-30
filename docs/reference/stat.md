@@ -1,5 +1,7 @@
 # Stat
 
+[DaisyUI documentation →](https://daisyui.com/components/stat/)
+
 Key metrics and numbers. Renders `<div class="stat ...">`.
 
 ```kotlin
