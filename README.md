@@ -136,6 +136,20 @@ This project uses [`just`](https://just.systems/) as a task runner. Run `just` t
 
 `just` is included in [`.tool-versions`](.tool-versions) and installed automatically with `asdf install`. The raw Gradle commands still work if you prefer them directly.
 
+## AI support
+
+This project ships AI-ready context files so AI tools can work with kdaisyui effectively:
+
+| Audience | File | Purpose |
+|---|---|---|
+| Contributors (all AI tools) | [`AGENTS.md`](AGENTS.md) | Single source of truth: conventions, codegen, anti-patterns |
+| Claude Code | [`CLAUDE.md`](CLAUDE.md) | Points to AGENTS.md + Claude-specific tips |
+| GitHub Copilot Agent | [`.github/copilot-instructions.md`](.github/copilot-instructions.md) | Links to AGENTS.md + quick reference |
+| CodeSeeker | [`CODESEEKER.md`](CODESEEKER.md) | Project metadata for code analysis |
+| Library users (any AI) | [`llms.txt`](llms.txt) | API reference — all 63 components, usage examples |
+
+If you're using kdaisyui as a dependency and want AI assistance, point your AI tool to [`llms.txt`](llms.txt).
+
 ## License
 
 MIT. See [LICENSE](LICENSE).

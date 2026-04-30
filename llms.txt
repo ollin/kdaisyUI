@@ -1,0 +1,508 @@
+# kdaisyui — llms.txt
+
+> Type-safe DaisyUI component DSL for Kotlin kotlinx.html.
+> Wraps Tailwind CSS classes into compile-time-checked Kotlin extension functions.
+> No frontend build tools required. No JavaScript frameworks. Just Kotlin.
+
+## Quick start
+
+### Dependency
+
+```kotlin
+// build.gradle.kts
+repositories {
+    mavenCentral()
+    maven("https://maven.pkg.github.com/ollin/kdaisyui")
+}
+
+dependencies {
+    implementation("io.github.ollin.kdaisyui:kdaisyui:5.5.19-1")
+}
+```
+
+### Import
+
+```kotlin
+import io.github.ollin.kdaisyui.components.*
+```
+
+### Minimal example
+
+```kotlin
+import io.github.ollin.kdaisyui.components.*
+import kotlinx.html.div
+import kotlinx.html.stream.createHTML
+
+val html = createHTML().div {
+    daisyButton("Deploy", variant = ButtonVariant.Primary, size = ButtonSize.Lg)
+}
+// → <div><button class="btn btn-primary btn-lg">Deploy</button></div>
+```
+
+## Common parameters
+
+Every component accepts these escape-hatch parameters:
+
+| Parameter | Type | Description |
+|---|---|---|
+| `extraClasses` | `String?` | Additional CSS classes, merged safely (no duplicates) |
+| `attrs` | `(TAG.() -> Unit)?` | Direct access to the underlying kotlinx.html tag |
+| `content` | `(TAG.() -> Unit)?` | Nested HTML content (some components require this) |
+
+## Naming conventions
+
+- CSS `btn-primary` → Kotlin `ButtonVariant.Primary`
+- CSS `btn-lg` → Kotlin `ButtonSize.Lg`
+- Boolean params map directly: `outline = true` → CSS class `btn-outline`
+- All components are `FlowContent.daisyXxx()` extension functions
+- Variant enums: `XxxVariant`, Size enums: `XxxSize`
+- Both have `internal val className: String`
+
+## Available components (63)
+
+| Component | Function | Description | Variants | Sizes |
+|---|---|---|---|---|
+| Alert | `daisyAlert` | Status messages and notifications | Info, Success, Warning, Error | — |
+| Avatar | `daisyAvatar` | User and entity representations | — | — |
+| Badge | `daisyBadge` | Labels, counts, and status tags | 8 colors | Xs–Xl |
+| Breadcrumbs | `daisyBreadcrumbs` | Navigation trail | — | — |
+| Button | `daisyButton` | Actions and triggers | 8 colors | Xs–Xl |
+| Calendar | `daisyCalendar` | Date picker | — | — |
+| Card | `daisyCard`, `daisyCardTitle`, `daisyCardBody`, `daisyCardActions` | Content containers | — | Xs–Xl |
+| Carousel | `daisyCarousel` | Image/content slider | — | — |
+| Chat | `daisyChat` | Chat message bubbles | — | — |
+| Checkbox | `daisyCheckbox` | Boolean toggles for forms | 8 colors | Xs–Xl |
+| Collapse | `daisyCollapse` | Collapsible content sections | — | — |
+| Countdown | `daisyCountdown` | Timer/countdown display | — | — |
+| Diff | `daisyDiff` | Side-by-side comparison | — | — |
+| Divider | `daisyDivider` | Visual separators | — | — |
+| Dock | `daisyDock` | macOS-style dock | — | — |
+| Drawer | `daisyDrawer`, `daisyDrawerToggle`, `daisyDrawerContent`, `daisyDrawerSide`, `daisyDrawerOverlay` | Sidebar layout with toggle | — | — |
+| Dropdown | `daisyDropdown`, `daisyDropdownContent` | Context menus and action lists | — | — |
+| Fab | `daisyFab` | Floating action button | — | — |
+| Fieldset | `daisyFieldset` | Groups related form controls | — | — |
+| FileInput | `daisyFileInput` | File upload fields | 8 colors | Xs–Xl |
+| Filter | `daisyFilter` | Filter controls | — | — |
+| Footer | `daisyFooter` | Page footer | — | — |
+| Hero | `daisyHero` | Full-width hero sections | — | — |
+| Hover3d | `daisyHover3d` | 3D hover effect | — | — |
+| HoverGallery | `daisyHoverGallery` | Image gallery with hover | — | — |
+| Indicator | `daisyIndicator`, `daisyIndicatorItem` | Overlay badges on elements | — | — |
+| Input | `daisyInput` | Text entry fields | 8 colors | Xs–Xl |
+| Join | `daisyJoin` | Groups buttons and inputs | — | — |
+| Kbd | `daisyKbd` | Keyboard key display | — | Xs–Xl |
+| Label | `daisyLabel` | Field labels and helper text | — | — |
+| Link | `daisyLink` | Styled anchor elements | 7 colors | — |
+| List | `daisyList` | Styled list | — | — |
+| Loading | `daisyLoading` | Loading spinners | — | Xs–Xl |
+| Mask | `daisyMask` | CSS mask shapes | — | — |
+| Menu | `daisyMenu`, `daisyMenuTitle`, `daisyMenuDropdown`, `daisyMenuDropdownToggle` | Navigation lists with submenus | — | Xs–Xl |
+| MockupBrowser | `daisyMockupBrowser` | Browser frame mockup | — | — |
+| MockupCode | `daisyMockupCode` | Code block mockup | — | — |
+| MockupPhone | `daisyMockupPhone` | Phone frame mockup | — | — |
+| MockupWindow | `daisyMockupWindow` | Window frame mockup | — | — |
+| Modal | `daisyModal`, `daisyModalBox`, `daisyModalAction`, `daisyModalBackdrop` | Modal dialogs | — | — |
+| Navbar | `daisyNavbar` | Top navigation bar | — | — |
+| Progress | `daisyProgress` | Progress bars | — | — |
+| RadialProgress | `daisyRadialProgress` | Circular progress indicator | — | — |
+| Radio | `daisyRadio` | Single-choice option groups | 8 colors | Xs–Xl |
+| Range | `daisyRange` | Slider for numeric ranges | 8 colors | Xs–Xl |
+| Rating | `daisyRating` | Star rating input | — | — |
+| Select | `daisySelect` | Dropdown option pickers | 7 colors | Xs–Xl |
+| Skeleton | `daisySkeleton` | Loading placeholder | — | — |
+| Stack | `daisyStack` | Overlapping stack layout | — | — |
+| Stat | `daisyStat`, `daisyStatStat`, `daisyStatStatTitle`, `daisyStatStatValue`, `daisyStatStatDesc`, `daisyStatStatFigure`, `daisyStatStatActions` | Key metrics and numbers | — | — |
+| Status | `daisyStatus` | Status indicators | — | — |
+| Steps | `daisySteps`, `daisyStep` | Step progress indicators | — | Xs–Xl |
+| Swap | `daisySwap` | Toggle between two states | — | — |
+| Tab | `daisyTab` | Tab navigation | — | Xs–Xl |
+| Table | `daisyTable` | Structured data in rows | — | — |
+| Textarea | `daisyTextarea` | Multi-line text input | — | Xs–Xl |
+| TextRotate | `daisyTextRotate` | Rotated text display | — | — |
+| ThemeController | `daisyThemeController` | Theme switcher | — | — |
+| Timeline | `daisyTimeline` | Vertical chronological display | — | — |
+| Toast | `daisyToast` | Notification popups | — | — |
+| Toggle | `daisyToggle` | Switch-style boolean input | 8 colors | Xs–Xl |
+| Tooltip | `daisyTooltip` | Hover information popup | — | — |
+| Validator | `daisyValidator` | Form validation wrapper | — | — |
+
+## Common variant values
+
+Most color variant enums follow the same pattern:
+
+```
+Neutral, Primary, Secondary, Accent, Info, Success, Warning, Error
+```
+
+Size enums:
+
+```
+Xs, Sm, Md, Lg, Xl
+```
+
+## Core utility
+
+```kotlin
+import io.github.ollin.kdaisyui.core.addClassNames
+
+// Merges CSS classes safely — deduplicates, preserves order
+div {
+    addClassNames("flex items-center gap-4")
+}
+```
+
+## Detailed component signatures
+
+### Alert
+
+```kotlin
+fun FlowContent.daisyAlert(
+    variant: AlertVariant? = null,   // Info | Success | Warning | Error
+    dash: Boolean = false,
+    horizontal: Boolean = false,
+    outline: Boolean = false,
+    soft: Boolean = false,
+    vertical: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DIV.() -> Unit)? = null,
+    content: (DIV.() -> Unit),
+)
+
+daisyAlert(variant = AlertVariant.Success) {
+    span { +"Pipeline completed successfully." }
+}
+```
+
+### Avatar
+
+```kotlin
+fun FlowContent.daisyAvatar(
+    offline: Boolean = false,
+    online: Boolean = false,
+    placeholder: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DIV.() -> Unit)? = null,
+    content: (DIV.() -> Unit),
+)
+
+daisyAvatar(online = true) {
+    div("w-12 rounded-full") { img(src = "user.jpg") }
+}
+```
+
+### Badge
+
+```kotlin
+fun FlowContent.daisyBadge(
+    text: String? = null,
+    variant: BadgeVariant? = null,   // 8 colors
+    size: BadgeSize? = null,         // Xs | Sm | Md | Lg | Xl
+    dash: Boolean = false,
+    ghost: Boolean = false,
+    outline: Boolean = false,
+    soft: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (SPAN.() -> Unit)? = null,
+    content: (SPAN.() -> Unit)? = null,
+)
+
+daisyBadge("Passing", variant = BadgeVariant.Success)
+daisyBadge("3", variant = BadgeVariant.Error, size = BadgeSize.Sm)
+```
+
+### Button
+
+```kotlin
+fun FlowContent.daisyButton(
+    text: String? = null,
+    variant: ButtonVariant? = null,  // 8 colors
+    size: ButtonSize? = null,        // Xs | Sm | Md | Lg | Xl
+    active: Boolean = false,
+    block: Boolean = false,
+    circle: Boolean = false,
+    dash: Boolean = false,
+    ghost: Boolean = false,
+    link: Boolean = false,
+    outline: Boolean = false,
+    soft: Boolean = false,
+    square: Boolean = false,
+    wide: Boolean = false,
+    disabled: Boolean = false,
+    type: ButtonType? = null,
+    extraClasses: String? = null,
+    attrs: (BUTTON.() -> Unit)? = null,
+    content: (BUTTON.() -> Unit)? = null,
+)
+
+daisyButton("Deploy", variant = ButtonVariant.Primary)
+daisyButton("Cancel", variant = ButtonVariant.Ghost)
+daisyButton("Delete", variant = ButtonVariant.Error, outline = true, size = ButtonSize.Sm)
+```
+
+### Card
+
+```kotlin
+fun FlowContent.daisyCard(
+    size: CardSize? = null,          // Xs | Sm | Md | Lg | Xl
+    border: Boolean = false,
+    dash: Boolean = false,
+    imageFull: Boolean = false,
+    side: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DIV.() -> Unit)? = null,
+    content: (DIV.() -> Unit),
+)
+fun FlowContent.daisyCardTitle(text: String? = null, extraClasses, attrs, content)
+fun FlowContent.daisyCardBody(extraClasses, attrs, content: (DIV.() -> Unit))
+fun FlowContent.daisyCardActions(extraClasses, attrs, content: (DIV.() -> Unit))
+
+daisyCard(extraClasses = "bg-base-100 shadow-xs") {
+    daisyCardBody {
+        daisyCardTitle { +"Pipeline Status" }
+        p { +"api-gateway · main · 2m 14s" }
+        daisyCardActions {
+            daisyButton("View logs", variant = ButtonVariant.Primary, size = ButtonSize.Sm)
+        }
+    }
+}
+```
+
+### Checkbox
+
+```kotlin
+fun FlowContent.daisyCheckbox(
+    variant: CheckboxVariant? = null,  // 8 colors
+    size: CheckboxSize? = null,        // Xs | Sm | Md | Lg | Xl
+    checked: Boolean = false,
+    disabled: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (INPUT.() -> Unit)? = null,
+)
+
+label("flex cursor-pointer gap-4") {
+    daisyCheckbox(size = CheckboxSize.Sm, checked = true)
+    span("label-text") { +"Branch protection enabled" }
+}
+```
+
+### Drawer
+
+```kotlin
+fun FlowContent.daisyDrawer(
+    end: Boolean = false,
+    open: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DIV.() -> Unit)? = null,
+    content: (DIV.() -> Unit),
+)
+fun FlowContent.daisyDrawerToggle(extraClasses, attrs, content)
+fun FlowContent.daisyDrawerContent(extraClasses, attrs, content)
+fun FlowContent.daisyDrawerSide(extraClasses, attrs, content)
+fun FlowContent.daisyDrawerOverlay(extraClasses, attrs, content: (LABEL.() -> Unit))
+
+daisyDrawer(extraClasses = "lg:drawer-open") {
+    daisyDrawerToggle { /* checkbox input */ }
+    daisyDrawerContent { /* main content */ }
+    daisyDrawerSide { /* sidebar nav */ }
+}
+```
+
+### Dropdown
+
+```kotlin
+fun FlowContent.daisyDropdown(
+    close: Boolean = false,
+    hover: Boolean = false,
+    open: Boolean = false,
+    end: Boolean = false, start: Boolean = false,
+    top: Boolean = false, bottom: Boolean = false,
+    left: Boolean = false, right: Boolean = false,
+    center: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DETAILS.() -> Unit)? = null,
+    content: (DETAILS.() -> Unit),
+)
+fun FlowContent.daisyDropdownContent(extraClasses, attrs, content: (DIV.() -> Unit))
+```
+
+### Input
+
+```kotlin
+fun FlowContent.daisyInput(
+    variant: InputVariant? = null,    // 8 colors
+    size: InputSize? = null,          // Xs | Sm | Md | Lg | Xl
+    ghost: Boolean = false,
+    type: InputType = InputType.text,
+    placeholder: String? = null,
+    value: String? = null,
+    disabled: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (INPUT.() -> Unit)? = null,
+)
+
+daisyInput(placeholder = "Search...", extraClasses = "w-full")
+```
+
+### Join
+
+```kotlin
+fun FlowContent.daisyJoin(
+    horizontal: Boolean = false,
+    vertical: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DIV.() -> Unit)? = null,
+    content: (DIV.() -> Unit),
+)
+
+// Add extraClasses = "join-item" to each child
+daisyJoin {
+    daisyButton("«", extraClasses = "join-item")
+    daisyButton("1", extraClasses = "join-item")
+}
+```
+
+### Menu
+
+```kotlin
+fun FlowContent.daisyMenu(
+    size: MenuSize? = null,   // Xs | Sm | Md | Lg | Xl
+    horizontal: Boolean = false,
+    vertical: Boolean = false,
+    // ...more params
+    extraClasses: String? = null,
+    attrs: (UL.() -> Unit)? = null,
+    content: (UL.() -> Unit),
+)
+fun FlowContent.daisyMenuTitle(text: String? = null, extraClasses, attrs, content)
+```
+
+### Modal
+
+```kotlin
+fun FlowContent.daisyModal(
+    bottom: Boolean = false, end: Boolean = false,
+    middle: Boolean = false, open: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (DIALOG.() -> Unit)? = null,
+    content: (DIALOG.() -> Unit),
+)
+fun FlowContent.daisyModalBox(extraClasses, attrs, content: (DIV.() -> Unit))
+fun FlowContent.daisyModalAction(extraClasses, attrs, content: (DIV.() -> Unit))
+fun FlowContent.daisyModalBackdrop(extraClasses, attrs, content: (DIV.() -> Unit))
+
+daisyModal(open = true) {
+    daisyModalBox { h3("text-lg font-bold") { +"Edit Profile" } }
+    daisyModalBackdrop { }
+}
+```
+
+### Radio
+
+```kotlin
+fun FlowContent.daisyRadio(
+    variant: RadioVariant? = null,   // 8 colors
+    size: RadioSize? = null,         // Xs | Sm | Md | Lg | Xl
+    name: String? = null,
+    checked: Boolean = false,
+    disabled: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (INPUT.() -> Unit)? = null,
+)
+```
+
+### Select
+
+```kotlin
+fun FlowContent.daisySelect(
+    variant: SelectVariant? = null,   // 7 colors
+    size: SelectSize? = null,         // Xs | Sm | Md | Lg | Xl
+    ghost: Boolean = false,
+    disabled: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (SELECT.() -> Unit)? = null,
+    content: (SELECT.() -> Unit),
+)
+
+daisySelect(extraClasses = "w-full") {
+    option { +"Option A" }
+    option { +"Option B" }
+}
+```
+
+### Stats
+
+```kotlin
+fun FlowContent.daisyStat(horizontal: Boolean = false, vertical: Boolean = false, ...)
+fun FlowContent.daisyStatStat(extraClasses, attrs, content)
+fun FlowContent.daisyStatStatTitle(text: String? = null, ...)
+fun FlowContent.daisyStatStatValue(text: String? = null, ...)
+fun FlowContent.daisyStatStatDesc(text: String? = null, ...)
+```
+
+### Swap
+
+```kotlin
+fun FlowContent.daisySwap(
+    rotate: Boolean = false,
+    flip: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (LABEL.() -> Unit)? = null,
+    content: (LABEL.() -> Unit),
+)
+
+daisySwap(rotate = true) {
+    span("swap-on text-2xl") { +"🌙" }
+    span("swap-off text-2xl") { +"☀️" }
+}
+```
+
+### Table
+
+```kotlin
+fun FlowContent.daisyTable(
+    zebra: Boolean = false,
+    pin: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (TABLE.() -> Unit)? = null,
+    content: (TABLE.() -> Unit),
+)
+```
+
+### Toggle
+
+```kotlin
+fun FlowContent.daisyToggle(
+    variant: ToggleVariant? = null,   // 8 colors
+    size: ToggleSize? = null,         // Xs | Sm | Md | Lg | Xl
+    checked: Boolean = false,
+    disabled: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (INPUT.() -> Unit)? = null,
+)
+```
+
+### Range
+
+```kotlin
+fun FlowContent.daisyRange(
+    variant: RangeVariant? = null,    // 8 colors
+    size: RangeSize? = null,          // Xs | Sm | Md | Lg | Xl
+    min: String? = null, max: String? = null,
+    value: String? = null, step: String? = null,
+    disabled: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (INPUT.() -> Unit)? = null,
+)
+```
+
+## Requirements
+
+- JDK 21+ (see `.tool-versions`)
+- Kotlin 2.3.10, kotlinx-html 0.12.0
+- DaisyUI 5.5.19
+
+## Links
+
+- Source: https://github.com/ollin/kdaisyui
+- DaisyUI: https://daisyui.com
+- kotlinx.html: https://github.com/Kotlin/kotlinx.html
