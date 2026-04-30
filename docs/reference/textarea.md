@@ -1,5 +1,7 @@
 # Textarea
 
+[DaisyUI documentation →](https://daisyui.com/components/textarea/)
+
 Multi-line text input. Renders `<textarea class="textarea ...">`.
 
 ```kotlin

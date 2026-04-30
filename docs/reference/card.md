@@ -1,5 +1,7 @@
 # Card
 
+[DaisyUI documentation →](https://daisyui.com/components/card/)
+
 Content containers with body and title. Renders `<div class="card ...">`.
 
 ```kotlin

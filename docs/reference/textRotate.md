@@ -1,5 +1,7 @@
 # TextRotate
 
+[DaisyUI documentation →](https://daisyui.com/components/text-rotate/)
+
 Rotated text display. Renders `<span class="text-rotate ...">`.
 
 ```kotlin

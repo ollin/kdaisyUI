@@ -1,5 +1,7 @@
 # Radio
 
+[DaisyUI documentation →](https://daisyui.com/components/radio/)
+
 Single-choice option groups. Renders `<input class="radio ...">`.
 
 ```kotlin

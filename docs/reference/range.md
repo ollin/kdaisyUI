@@ -1,5 +1,7 @@
 # Range
 
+[DaisyUI documentation →](https://daisyui.com/components/range/)
+
 Slider for numeric ranges. Renders `<input class="range ...">`.
 
 ```kotlin

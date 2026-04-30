@@ -1,5 +1,7 @@
 # Chat
 
+[DaisyUI documentation →](https://daisyui.com/components/chat/)
+
 Chat bubble layout for conversations. Renders `<div class="chat ...">`.
 
 ```kotlin

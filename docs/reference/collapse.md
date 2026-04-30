@@ -1,5 +1,7 @@
 # Collapse
 
+[DaisyUI documentation →](https://daisyui.com/components/collapse/)
+
 Collapsible content sections. Renders `<div class="collapse ...">`.
 
 ```kotlin

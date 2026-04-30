@@ -1,5 +1,7 @@
 # FileInput
 
+[DaisyUI documentation →](https://daisyui.com/components/file-input/)
+
 File upload input field. Renders `<input class="file-input ...">`.
 
 ```kotlin

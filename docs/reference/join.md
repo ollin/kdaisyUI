@@ -1,5 +1,7 @@
 # Join
 
+[DaisyUI documentation →](https://daisyui.com/components/join/)
+
 Groups buttons and inputs together. Renders `<div class="join ...">`.
 
 ```kotlin

@@ -1,5 +1,7 @@
 # Drawer
 
+[DaisyUI documentation →](https://daisyui.com/components/drawer/)
+
 Sidebar layout with toggle. Renders `<div class="drawer ...">`.
 
 ```kotlin

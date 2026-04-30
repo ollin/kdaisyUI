@@ -1,5 +1,7 @@
 # Toggle
 
+[DaisyUI documentation →](https://daisyui.com/components/toggle/)
+
 Switch-style boolean input. Renders `<input class="toggle ...">`.
 
 ```kotlin

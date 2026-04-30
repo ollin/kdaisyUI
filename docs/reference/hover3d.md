@@ -1,5 +1,7 @@
 # Hover3d
 
+[DaisyUI documentation →](https://daisyui.com/components/hover-3d/)
+
 3D hover effect container. Renders `<div class="hover3d ...">`.
 
 ```kotlin

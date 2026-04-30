@@ -1,5 +1,7 @@
 # Input
 
+[DaisyUI documentation →](https://daisyui.com/components/input/)
+
 Text entry fields. Renders `<input class="input ...">`.
 
 ```kotlin

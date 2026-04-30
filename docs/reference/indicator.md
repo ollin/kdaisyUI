@@ -1,5 +1,7 @@
 # Indicator
 
+[DaisyUI documentation →](https://daisyui.com/components/indicator/)
+
 Overlays badges on elements. Renders `<div class="indicator ...">`.
 
 ```kotlin

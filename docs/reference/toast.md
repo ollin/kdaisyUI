@@ -1,5 +1,7 @@
 # Toast
 
+[DaisyUI documentation →](https://daisyui.com/components/toast/)
+
 Toast notification container. Renders `<div class="toast ...">`.
 
 ```kotlin

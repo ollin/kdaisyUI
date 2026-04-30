@@ -1,5 +1,7 @@
 # Link
 
+[DaisyUI documentation →](https://daisyui.com/components/link/)
+
 Styled anchor elements. Renders `<a class="link ...">`.
 
 ```kotlin

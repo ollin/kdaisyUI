@@ -1,5 +1,7 @@
 # RadialProgress
 
+[DaisyUI documentation →](https://daisyui.com/components/radial-progress/)
+
 Circular progress indicator. Renders `<div class="radial-progress ...">`.
 
 ```kotlin

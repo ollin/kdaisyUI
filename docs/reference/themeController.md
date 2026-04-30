@@ -1,5 +1,7 @@
 # ThemeController
 
+[DaisyUI documentation →](https://daisyui.com/components/theme-controller/)
+
 DaisyUI theme controller toggle. Renders `<input class="theme-controller ...">`.
 
 ```kotlin

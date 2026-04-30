@@ -1,5 +1,7 @@
 # Modal
 
+[DaisyUI documentation →](https://daisyui.com/components/modal/)
+
 Modal dialogs. Renders `<dialog class="modal ...">`.
 
 ```kotlin

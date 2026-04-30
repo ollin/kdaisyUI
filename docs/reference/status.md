@@ -1,5 +1,7 @@
 # Status
 
+[DaisyUI documentation →](https://daisyui.com/components/status/)
+
 Small status indicator dot. Renders `<span class="status ...">`.
 
 ```kotlin

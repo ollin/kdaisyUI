@@ -1,5 +1,7 @@
 # Checkbox
 
+[DaisyUI documentation →](https://daisyui.com/components/checkbox/)
+
 Boolean toggles for forms. Renders `<input class="checkbox ...">`.
 
 ```kotlin

@@ -1,5 +1,7 @@
 # Carousel
 
+[DaisyUI documentation →](https://daisyui.com/components/carousel/)
+
 Slideshow of images or content. Renders `<div class="carousel ...">`.
 
 ```kotlin

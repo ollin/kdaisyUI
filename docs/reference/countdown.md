@@ -1,5 +1,7 @@
 # Countdown
 
+[DaisyUI documentation →](https://daisyui.com/components/countdown/)
+
 Timer countdown display. Renders `<span class="countdown ...">`.
 
 ```kotlin
