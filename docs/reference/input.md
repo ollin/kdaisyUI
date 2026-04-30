@@ -1,0 +1,18 @@
+# Input
+
+Text entry fields. Renders `<input class="input ...">`.
+
+```kotlin
+// InputVariant: Neutral | Primary | Secondary | Accent | Info | Success | Warning | Error, InputSize: Xs | Sm | Md | Lg | Xl
+fun FlowContent.daisyInput(
+    variant: InputVariant? = null,
+    size: InputSize? = null,
+    ghost: Boolean = false,
+    type: InputType = InputType.text,
+    placeholder: String? = null,
+    value: String? = null,
+    disabled: Boolean = false,
+    extraClasses: String? = null,
+    attrs: (INPUT.() -> Unit)? = null,
+)
+```
