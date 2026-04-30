@@ -85,18 +85,7 @@ val html = createHTML().div {
 
 ## Development environment
 
-### Option A — Dev Container (recommended for new contributors)
-
-Open in any Dev Container-compatible editor (VS Code, IntelliJ, GitHub Codespaces):
-
-```bash
-git clone https://github.com/ollin/kdaisyui
-# Open in VS Code → "Reopen in Container"
-```
-
-The container provides JDK, Gradle, Node, and Playwright Chromium pre-installed (exact versions from [`.tool-versions`](.tool-versions)). Port 8080 is forwarded automatically.
-
-### Option B — Local with asdf
+### Option A — Local with asdf
 
 ```bash
 git clone https://github.com/ollin/kdaisyui
@@ -106,7 +95,7 @@ just test      # run unit tests
 just dev       # start dev server → http://localhost:8080
 ```
 
-### Option C — Any JDK 21+
+### Option B — Any JDK 21+
 
 The Gradle wrapper downloads Gradle automatically (version in [`gradle/wrapper/gradle-wrapper.properties`](gradle/wrapper/gradle-wrapper.properties)). Just bring your own JDK 21+.
 
