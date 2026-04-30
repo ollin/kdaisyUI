@@ -90,7 +90,7 @@ val html = createHTML().div {
 ```bash
 git clone https://github.com/ollin/kdaisyui
 cd kdaisyui
-asdf install   # reads .tool-versions — installs JDK, Gradle, Node, just
+asdf install   # reads .tool-versions — installs JDK, Node, just
 just test      # run unit tests
 just dev       # start dev server → http://localhost:8080
 ```
