@@ -1,5 +1,7 @@
 # Tooltip
 
+[DaisyUI documentation →](https://daisyui.com/components/tooltip/)
+
 Hover tooltip on elements. Renders `<div class="tooltip ...">`.
 
 ```kotlin

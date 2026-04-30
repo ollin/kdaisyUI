@@ -1,5 +1,7 @@
 # Validator
 
+[DaisyUI documentation →](https://daisyui.com/components/validator/)
+
 Form validation wrapper. Renders `<input class="validator ...">`.
 
 ```kotlin

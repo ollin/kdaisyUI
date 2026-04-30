@@ -1,5 +1,7 @@
 # Filter
 
+[DaisyUI documentation →](https://daisyui.com/components/filter/)
+
 Filter reset for search and forms. Renders `<form class="filter ...">`.
 
 ```kotlin

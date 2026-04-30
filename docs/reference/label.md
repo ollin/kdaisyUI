@@ -1,5 +1,7 @@
 # Label
 
+[DaisyUI documentation →](https://daisyui.com/components/label/)
+
 Field labels and helper text. Renders `<span class="label ...">`.
 
 ```kotlin

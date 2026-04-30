@@ -1,5 +1,7 @@
 # Fieldset
 
+[DaisyUI documentation →](https://daisyui.com/components/fieldset/)
+
 Groups related form controls. Renders `<fieldset class="fieldset ...">`.
 
 ```kotlin

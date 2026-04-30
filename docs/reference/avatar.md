@@ -1,5 +1,7 @@
 # Avatar
 
+[DaisyUI documentation →](https://daisyui.com/components/avatar/)
+
 User and entity representations. Renders `<div class="avatar ...">`.
 
 ```kotlin

@@ -1,5 +1,7 @@
 # Fab
 
+[DaisyUI documentation →](https://daisyui.com/components/fab/)
+
 Floating action button with expandable actions. Renders `<div class="fab ...">`.
 
 ```kotlin

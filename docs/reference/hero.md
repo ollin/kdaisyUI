@@ -1,5 +1,7 @@
 # Hero
 
+[DaisyUI documentation →](https://daisyui.com/components/hero/)
+
 Hero banner with overlay. Renders `<div class="hero ...">`.
 
 ```kotlin

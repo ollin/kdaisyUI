@@ -1,5 +1,7 @@
 # Loading
 
+[DaisyUI documentation →](https://daisyui.com/components/loading/)
+
 Loading spinners and indicators. Renders `<span class="loading ...">`.
 
 ```kotlin

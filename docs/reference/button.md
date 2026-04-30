@@ -1,5 +1,7 @@
 # Button
 
+[DaisyUI documentation →](https://daisyui.com/components/button/)
+
 Actions and triggers. Renders `<button class="button ...">`.
 
 ```kotlin

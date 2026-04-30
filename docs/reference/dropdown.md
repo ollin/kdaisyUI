@@ -1,5 +1,7 @@
 # Dropdown
 
+[DaisyUI documentation →](https://daisyui.com/components/dropdown/)
+
 Context menus and action lists. Renders `<details class="dropdown ...">`.
 
 ```kotlin

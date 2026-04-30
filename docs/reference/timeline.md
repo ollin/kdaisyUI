@@ -1,5 +1,7 @@
 # Timeline
 
+[DaisyUI documentation →](https://daisyui.com/components/timeline/)
+
 Vertical or horizontal timeline. Renders `<ul class="timeline ...">`.
 
 ```kotlin

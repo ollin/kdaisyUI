@@ -1,5 +1,7 @@
 # Badge
 
+[DaisyUI documentation →](https://daisyui.com/components/badge/)
+
 Labels, counts, and status tags. Renders `<span class="badge ...">`.
 
 ```kotlin

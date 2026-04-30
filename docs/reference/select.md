@@ -1,5 +1,7 @@
 # Select
 
+[DaisyUI documentation →](https://daisyui.com/components/select/)
+
 Dropdown option pickers. Renders `<select class="select ...">`.
 
 ```kotlin

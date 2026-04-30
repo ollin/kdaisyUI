@@ -1,5 +1,7 @@
 # Diff
 
+[DaisyUI documentation →](https://daisyui.com/components/diff/)
+
 Side-by-side diff viewer. Renders `<figure class="diff ...">`.
 
 ```kotlin

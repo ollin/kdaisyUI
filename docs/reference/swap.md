@@ -1,5 +1,7 @@
 # Swap
 
+[DaisyUI documentation →](https://daisyui.com/components/swap/)
+
 Toggle between two states. Renders `<label class="swap ...">`.
 
 ```kotlin

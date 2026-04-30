@@ -1,5 +1,7 @@
 # List
 
+[DaisyUI documentation →](https://daisyui.com/components/list/)
+
 Styled list layout. Renders `<ul class="list ...">`.
 
 ```kotlin
