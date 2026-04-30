@@ -45,6 +45,8 @@ This project follows the [Diátaxis](https://diataxis.fr/) documentation framewo
 - **Need a specific recipe?** Check the [How-to guides](docs/how-to.md)
 - **Looking up an API?** See the [Component reference](docs/reference.md)
 
+> **🚧 Not yet published.** A few things need to be finalized before the first artifact is available on GitHub Packages. Until then, you can build from source with `just build`.
+
 ## Quick start
 
 ### 1. Add the dependency
