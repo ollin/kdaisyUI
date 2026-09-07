@@ -63,7 +63,7 @@ as an E2E scenario that saves screenshots to disk. Two reasons, both better than
   output. The new public wrapper and its generated tests land together.
   → `. F` — regeneration is tool-produced and drift-checked; precedent `2297257`
 
-- [ ] 3.3 Re-dump the API baseline with `just update-api` and **read the diff**. This is an
+- [x] 3.3 Re-dump the API baseline with `just update-api` and **read the diff**. This is an
   additive change, so no `README.md` migration entry should be needed — confirm that rather than
   assume it.
   → `. r`
