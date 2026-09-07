@@ -127,4 +127,31 @@ class MegamenuCoverageTest {
         assertTrue(html.contains("data-attrs=\"yes\""), "MegamenuActive attrs")
         assertTrue(html.contains("data-content=\"yes\""), "MegamenuActive content")
     }
+
+    @Test
+    fun megamenuPanel_defaults() {
+        val html = createHTML(prettyPrint = false).div {
+            daisyMegamenuPanel(
+                content = { },
+            )
+        }
+        assertTrue(!html.contains("class=\""), "MegamenuPanel defaults emits no class")
+    }
+
+    @Test
+    fun megamenuPanel_all_flags() {
+        val html = createHTML(prettyPrint = false).div {
+            daisyMegamenuPanel(
+                id = htmlId("x-cov-id"),
+                extraClasses = "zz-extra",
+                attrs = { attributes["data-attrs"] = "yes" },
+                content = { attributes["data-content"] = "yes" },
+            )
+        }
+        val actualClasses = html.substringAfter("class=\"").substringBefore("\"").split(" ").sorted().joinToString(" ")
+        assertEquals("zz-extra", actualClasses, "MegamenuPanel all flags")
+        assertTrue(html.contains("id=\"x-cov-id\""), "MegamenuPanel id")
+        assertTrue(html.contains("data-attrs=\"yes\""), "MegamenuPanel attrs")
+        assertTrue(html.contains("data-content=\"yes\""), "MegamenuPanel content")
+    }
 }
