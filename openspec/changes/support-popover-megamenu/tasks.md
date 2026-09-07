@@ -86,7 +86,7 @@ as an E2E scenario that saves screenshots to disk. Two reasons, both better than
   → `. r` for the page, then `^ F` with its scenario — a route with no test cannot be `^`
   (the lesson from `support-popover-modals` 5.1)
 
-- [ ] 5.2 Add a Cucumber scenario asserting the served HTML carries `class="megamenu"` and
+- [x] 5.2 Add a Cucumber scenario asserting the served HTML carries `class="megamenu"` and
   `popover`, and — tagged `@nojs` — that a panel reaches `:popover-open` on a click. The `@nojs`
   hook and the `:popover-open` steps already exist from `support-popover-modals`.
   → `^ F`
