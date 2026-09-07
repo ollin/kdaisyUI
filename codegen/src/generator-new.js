@@ -81,6 +81,20 @@ function getAllBooleanParams(classified, extras, config, componentName) {
   return booleans.sort()
 }
 
+/** Renders static attributes as they read in a KDoc `Renders <tag ...>` line. */
+function staticAttributeDoc(entries) {
+  return entries
+    .map(([name, value]) => (value === '' ? ` ${name}` : ` ${name}="${value}"`))
+    .join('')
+}
+
+/** Renders static attributes as kotlinx.html body lines, indented for a tag block. */
+function staticAttributeLines(entries) {
+  return entries.map(
+    ([name, value]) => `        attributes[${JSON.stringify(name)}] = ${JSON.stringify(value)}`,
+  )
+}
+
 /** Reads a component-keyed config section, e.g. `roles.button`. */
 function componentSetting(config, section, componentName, fallback) {
   return config?.[section]?.[componentName.toLowerCase()] ?? fallback
@@ -100,8 +114,9 @@ function generateMainFunction(classified, element, config) {
   const noContent = componentListed(config, 'noContent', componentName)
   const role = componentSetting(config, 'roles', componentName)
   const fixedInputType = componentSetting(config, 'inputTypes', componentName)
+  const componentAttributes = Object.entries(componentSetting(config, 'componentAttributes', componentName, {}))
   
-  const kdoc = generateFunctionKdoc(classified, element, { booleans, extras, hasTextParam, noContent })
+  const kdoc = generateFunctionKdoc(classified, element, { booleans, extras, hasTextParam, noContent, componentAttributes })
 
   const params = []
   if (hasTextParam) params.push('    text: String? = null,')
@@ -130,18 +145,18 @@ function generateMainFunction(classified, element, config) {
     params.push(`    attrs: (${element}.() -> Unit)? = null,`)
   }
   
-  const body = generateFunctionBody(classified, element, { extras, role, fixedInputType, hasTextParam, booleans, noContent })
+  const body = generateFunctionBody(classified, element, { extras, role, fixedInputType, hasTextParam, booleans, noContent, componentAttributes })
   
   return `${kdoc}fun FlowContent.daisy${componentName}(\n${params.join('\n')}\n) {\n    ${htmlTag} {\n${body}\n    }\n}`
 }
 
 function generateFunctionKdoc(classified, element, options) {
   const { componentName, desc, descs, prefix } = classified
-  const { booleans, extras, hasTextParam, noContent } = options
+  const { booleans, extras, hasTextParam, noContent, componentAttributes } = options
   const htmlTag = htmlTagFor(element)
   const lines = []
 
-  const rendersTag = `Renders \`<${htmlTag} class="${prefix} ...">\`.`
+  const rendersTag = `Renders \`<${htmlTag} class="${prefix} ..."${staticAttributeDoc(componentAttributes)}>\`.`
   const firstLine = desc ? `${desc} ${rendersTag}` : rendersTag
   lines.push(firstLine)
 
@@ -181,10 +196,11 @@ function generateFunctionKdoc(classified, element, options) {
 
 function generateFunctionBody(classified, element, options) {
   const { prefix, styles } = classified
-  const { extras, role, fixedInputType, hasTextParam, booleans, noContent } = options
+  const { extras, role, fixedInputType, hasTextParam, booleans, noContent, componentAttributes } = options
   const lines = []
   
   lines.push(`        if (id != null) attributes["id"] = id.id`)
+  lines.push(...staticAttributeLines(componentAttributes))
   if (role) lines.push(`        role = "${role}"`)
   if (fixedInputType) lines.push(`        type = InputType.${fixedInputType}`)
   
@@ -283,9 +299,7 @@ function generateCustomPartFunction(classified, part) {
   const receiver = part.receiver || 'FlowContent'
   const staticAttributes = Object.entries(part.staticAttributes || {})
 
-  const attrDoc = staticAttributes
-    .map(([name, value]) => (value === '' ? ` ${name}` : ` ${name}="${value}"`))
-    .join('')
+  const attrDoc = staticAttributeDoc(staticAttributes)
   const kdocLine = cssClass
     ? `Renders \`<${htmlTag} class="${cssClass} ..."${attrDoc}>\`.`
     : `Structural wrapper. Renders \`<${htmlTag}${attrDoc}>\`.`
@@ -299,9 +313,7 @@ function generateCustomPartFunction(classified, part) {
 
   const body = []
   body.push(`        if (id != null) attributes["id"] = id.id`)
-  for (const [name, value] of staticAttributes) {
-    body.push(`        attributes[${JSON.stringify(name)}] = ${JSON.stringify(value)}`)
-  }
+  body.push(...staticAttributeLines(staticAttributes))
   if (cssClass) {
     body.push(`        addClassNames("${cssClass}")`)
   }
