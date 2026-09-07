@@ -111,12 +111,12 @@ an unsupported feature.
   heuristic that happens to return exactly what both entries say, which is why dead config went
   unnoticed. So the task's prescribed remedy has to be built before it can be used.
 
-- [ ] 6.1a Wire `subComponentElements` into `inferPartElement`, config taking precedence over the
+- [x] 6.1a Wire `subComponentElements` into `inferPartElement`, config taking precedence over the
   heuristic. The two entries already present are what the heuristic already returns, so
   `just generate` must produce a **zero diff** — the same proof used in 2.1.
   → `. r`
 
-- [ ] 6.1b Set `"megamenu-active": "SPAN"` and regenerate, with the E2E assertion that the
+- [x] 6.1b Set `"megamenu-active": "SPAN"` and regenerate, with the E2E assertion that the
   indicator tracks the open panel's trigger. Red and green land together.
   → `^ B`
 
