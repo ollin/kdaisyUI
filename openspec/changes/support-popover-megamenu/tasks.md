@@ -79,7 +79,7 @@ as an E2E scenario that saves screenshots to disk. Two reasons, both better than
 
 ## 5. Prove it opens in a browser
 
-- [ ] 5.1 Replace the megamenu card in `example-app`'s `WhatsNewFragment.kt` with one built from
+- [x] 5.1 Replace the megamenu card in `example-app`'s `WhatsNewFragment.kt` with one built from
   the generated wrappers and opened by a `popovertarget` button — or give it its own route if the
   htmx-loaded fragment cannot be reached with JavaScript disabled, as was the case for the modal.
   Decide which from 1.1's finding.
