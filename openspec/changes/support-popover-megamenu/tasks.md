@@ -49,7 +49,7 @@ as an E2E scenario that saves screenshots to disk. Two reasons, both better than
   nothing.
   → `. r`
 
-- [ ] 2.2 Mirror it in `codegen/src/test-generator.js` so the generated component test asserts the
+- [x] 2.2 Mirror it in `codegen/src/test-generator.js` so the generated component test asserts the
   attribute. Zero diff for the same reason.
   → `. r`
 
