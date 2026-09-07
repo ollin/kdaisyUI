@@ -51,7 +51,9 @@ class WhatsNewFragmentTest : PlaywrightSpec() {
             val megamenu = page.locator("#dashboard-whats-new-megamenu")
             assertThat(megamenu).hasClass(Regex(".*\\bmegamenu\\b.*").toPattern())
             assertThat(megamenu).hasClass(Regex(".*\\bmegamenu-wide\\b.*").toPattern())
-            assertThat(megamenu.locator("div.megamenu-active")).hasCount(1)
+            // span, not div: the panels beside it are selected by :nth-of-type, so a div
+            // indicator would take div index 1 and shift every panel by one.
+            assertThat(megamenu.locator("span.megamenu-active")).hasCount(1)
 
             // The menu now lives in a closed popover panel, so it starts hidden. Asserting that
             // first is what makes the click below evidence: the previous version of this test

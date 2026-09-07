@@ -9,6 +9,8 @@ import io.github.ollin.kdaisyui.core.HtmlId
 import kotlinx.html.div
 import kotlinx.html.DIV
 import kotlinx.html.FlowContent
+import kotlinx.html.span
+import kotlinx.html.SPAN
 
 /** Size variants for this component (CSS prefix: `megamenu-`) */
 enum class MegamenuSize(internal val className: String) {
@@ -60,14 +62,14 @@ fun FlowContent.daisyMegamenu(
     }
 }
 
-/** Renders `<div class="megamenu-active ...">`. */
+/** Renders `<span class="megamenu-active ...">`. */
 fun FlowContent.daisyMegamenuActive(
     id: HtmlId? = null,
     extraClasses: String? = null,
-    attrs: (DIV.() -> Unit)? = null,
-    content: (DIV.() -> Unit),
+    attrs: (SPAN.() -> Unit)? = null,
+    content: (SPAN.() -> Unit),
 ) {
-    div {
+    span {
         if (id != null) attributes["id"] = id.id
         addClassNames("megamenu-active")
         addClassNames(extraClasses)

@@ -197,7 +197,8 @@
   },
   "subComponentElements": {
     "card-title": "H2",
-    "card-actions": "DIV"
+    "card-actions": "DIV",
+    "megamenu-active": "SPAN"
   },
   "componentAttributes": {
     "megamenu": { "popover": "" }
