@@ -53,7 +53,9 @@ private fun TagConsumer<*>.megamenuCard() {
         daisyCardBody {
             daisyCardTitle("Navigation Preview")
             daisyMegamenu(id = Dashboard.WhatsNew.Megamenu(), wide = true) {
-                daisyMegamenuActive {
+                daisyMegamenuActive { }
+                button { attributes["popovertarget"] = Dashboard.WhatsNew.Megamenu.Panel().id; +"Browse" }
+                daisyMegamenuPanel(id = Dashboard.WhatsNew.Megamenu.Panel()) {
                     daisyMenu(extraClasses = "w-full") {
                         li { a { +"Repositories" } }
                         li { a { +"Pipelines" } }

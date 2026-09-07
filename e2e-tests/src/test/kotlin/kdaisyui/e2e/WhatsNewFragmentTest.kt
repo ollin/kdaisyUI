@@ -42,7 +42,7 @@ class WhatsNewFragmentTest : PlaywrightSpec() {
             assertThat(otp.locator("span")).hasCount(6)
         }
 
-        test("megamenu renders its active popover and menu") {
+        test("megamenu opens its panel on the trigger") {
             page.navigate("/")
 
             assertThat(page.getByRole(AriaRole.HEADING, GetByRoleOptions().setName("Navigation Preview")))
@@ -52,7 +52,19 @@ class WhatsNewFragmentTest : PlaywrightSpec() {
             assertThat(megamenu).hasClass(Regex(".*\\bmegamenu\\b.*").toPattern())
             assertThat(megamenu).hasClass(Regex(".*\\bmegamenu-wide\\b.*").toPattern())
             assertThat(megamenu.locator("div.megamenu-active")).hasCount(1)
-            assertThat(megamenu.locator("ul.menu")).hasCount(1)
+
+            // The menu now lives in a closed popover panel, so it starts hidden. Asserting that
+            // first is what makes the click below evidence: the previous version of this test
+            // asserted only visibility, which a megamenu that could never open also satisfied.
+            val panel = page.locator("#dashboard-whats-new-megamenu-panel")
+            assertThat(panel).hasCount(1)
+            assertThat(megamenu.getByText("Repositories")).isHidden()
+
+            // By name and exact: getByText("Browse") is a case-insensitive substring match and
+            // would also match prose elsewhere on the dashboard.
+            page.getByRole(AriaRole.BUTTON, GetByRoleOptions().setName("Browse").setExact(true)).click()
+
+            assertThat(panel).isVisible()
             // By text, not by AriaRole.LINK: these anchors carry no href, so they have no link
             // role — same as the existing Team Activity menu this fragment is modelled on.
             assertThat(megamenu.getByText("Repositories")).isVisible()

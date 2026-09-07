@@ -41,7 +41,9 @@ class Dashboard : AnnotatedIdBase("dashboard") {
 
     class WhatsNew(parent: Dashboard = Dashboard()) : AnnotatedIdBase("whats-new", parent) {
         class Otp(parent: WhatsNew = WhatsNew()) : AnnotatedIdBase("otp", parent)
-        class Megamenu(parent: WhatsNew = WhatsNew()) : AnnotatedIdBase("megamenu", parent)
+        class Megamenu(parent: WhatsNew = WhatsNew()) : AnnotatedIdBase("megamenu", parent) {
+            class Panel(parent: Megamenu = Megamenu()) : AnnotatedIdBase("panel", parent)
+        }
     }
 
     class Repo(parent: Dashboard = Dashboard()) : AnnotatedIdBase("repo", parent) {
