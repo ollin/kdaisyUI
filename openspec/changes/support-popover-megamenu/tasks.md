@@ -59,7 +59,7 @@ as an E2E scenario that saves screenshots to disk. Two reasons, both better than
   inner panel (`cssClass: null`, `staticAttributes: { "popover": "" }`). Config only.
   → `. r`
 
-- [ ] 3.2 Run `just generate`, review the diff under `lib/generated/`, commit the regenerated
+- [x] 3.2 Run `just generate`, review the diff under `lib/generated/`, commit the regenerated
   output. The new public wrapper and its generated tests land together.
   → `. F` — regeneration is tool-produced and drift-checked; precedent `2297257`
 
