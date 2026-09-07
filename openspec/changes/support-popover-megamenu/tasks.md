@@ -43,7 +43,7 @@ as an E2E scenario that saves screenshots to disk. Two reasons, both better than
 
 ## 2. Teach the generator to put static attributes on a main component
 
-- [ ] 2.1 Lift `staticAttributes` from `generateCustomPartFunction` to the main component path in
+- [x] 2.1 Lift `staticAttributes` from `generateCustomPartFunction` to the main component path in
   `codegen/src/generator-new.js`, reading a new `componentAttributes` config key. No component
   declares it yet, so `just generate` must produce a **zero diff** — that is the proof it changed
   nothing.
