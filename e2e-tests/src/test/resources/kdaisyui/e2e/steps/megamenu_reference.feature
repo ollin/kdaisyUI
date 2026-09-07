@@ -1,10 +1,11 @@
 Feature: Megamenu Reference
-  DaisyUI's documented megamenu markup, hand-written, kept so it can be looked at
+  DaisyUI's documented megamenu, kept so it can be looked at
 
   The screenshots land in e2e-tests/build/reports/screenshots/. They exist to be reviewed by a
   human: a megamenu that renders wrongly is something an eye catches and an assertion does not.
-  When task 5.1 rebuilds this page from generated wrappers, the same images prove the rebuild
-  matches the reference.
+  These scenarios were written against the same markup hand-written in raw kotlinx.html, and are
+  unchanged now that the page is built from the generated wrappers — which is what makes them
+  evidence that the wrappers produce the documented construction.
 
   Scenario: The served markup carries the documented megamenu construction
     Then the endpoint "/megamenu-reference" returns status 200
