@@ -81,17 +81,42 @@ function getAllBooleanParams(classified, extras, config, componentName) {
   return booleans.sort()
 }
 
+/** Renders static attributes as they read in a KDoc `Renders <tag ...>` line. */
+function staticAttributeDoc(entries) {
+  return entries
+    .map(([name, value]) => (value === '' ? ` ${name}` : ` ${name}="${value}"`))
+    .join('')
+}
+
+/** Renders static attributes as kotlinx.html body lines, indented for a tag block. */
+function staticAttributeLines(entries) {
+  return entries.map(
+    ([name, value]) => `        attributes[${JSON.stringify(name)}] = ${JSON.stringify(value)}`,
+  )
+}
+
+/** Reads a component-keyed config section, e.g. `roles.button`. */
+function componentSetting(config, section, componentName, fallback) {
+  return config?.[section]?.[componentName.toLowerCase()] ?? fallback
+}
+
+/** Tests membership in a config section that is a flat list of component names. */
+function componentListed(config, section, componentName) {
+  return config?.[section]?.includes(componentName.toLowerCase()) ?? false
+}
+
 function generateMainFunction(classified, element, config) {
   const { componentName, prefix, desc, descs } = classified
   const htmlTag = htmlTagFor(element)
-  const extras = config?.extras?.[classified.componentName.toLowerCase()] || []
+  const extras = componentSetting(config, 'extras', componentName, [])
   const booleans = getAllBooleanParams(classified, extras, config, componentName)
-  const hasTextParam = config?.textParams?.includes(classified.componentName.toLowerCase()) || false
-  const noContent = config?.noContent?.includes(classified.componentName.toLowerCase()) || false
-  const role = config?.roles?.[classified.componentName.toLowerCase()]
-  const fixedInputType = config?.inputTypes?.[classified.componentName.toLowerCase()]
+  const hasTextParam = componentListed(config, 'textParams', componentName)
+  const noContent = componentListed(config, 'noContent', componentName)
+  const role = componentSetting(config, 'roles', componentName)
+  const fixedInputType = componentSetting(config, 'inputTypes', componentName)
+  const componentAttributes = Object.entries(componentSetting(config, 'componentAttributes', componentName, {}))
   
-  const kdoc = generateFunctionKdoc(classified, element, { booleans, extras, hasTextParam, noContent })
+  const kdoc = generateFunctionKdoc(classified, element, { booleans, extras, hasTextParam, noContent, componentAttributes })
 
   const params = []
   if (hasTextParam) params.push('    text: String? = null,')
@@ -120,20 +145,19 @@ function generateMainFunction(classified, element, config) {
     params.push(`    attrs: (${element}.() -> Unit)? = null,`)
   }
   
-  const body = generateFunctionBody(classified, element, { extras, role, fixedInputType, hasTextParam, booleans, noContent })
+  const body = generateFunctionBody(classified, element, { extras, role, fixedInputType, hasTextParam, booleans, noContent, componentAttributes })
   
   return `${kdoc}fun FlowContent.daisy${componentName}(\n${params.join('\n')}\n) {\n    ${htmlTag} {\n${body}\n    }\n}`
 }
 
 function generateFunctionKdoc(classified, element, options) {
   const { componentName, desc, descs, prefix } = classified
-  const { booleans, extras, hasTextParam, noContent } = options
+  const { booleans, extras, hasTextParam, noContent, componentAttributes } = options
   const htmlTag = htmlTagFor(element)
   const lines = []
 
-  const firstLine = desc
-    ? `${desc} Renders \`<${htmlTag} class="${prefix} ...">\`.`
-    : `Renders \`<${htmlTag} class="${prefix} ...">\`.`
+  const rendersTag = `Renders \`<${htmlTag} class="${prefix} ..."${staticAttributeDoc(componentAttributes)}>\`.`
+  const firstLine = desc ? `${desc} ${rendersTag}` : rendersTag
   lines.push(firstLine)
 
   if (hasTextParam) {
@@ -172,10 +196,11 @@ function generateFunctionKdoc(classified, element, options) {
 
 function generateFunctionBody(classified, element, options) {
   const { prefix, styles } = classified
-  const { extras, role, fixedInputType, hasTextParam, booleans, noContent } = options
+  const { extras, role, fixedInputType, hasTextParam, booleans, noContent, componentAttributes } = options
   const lines = []
   
   lines.push(`        if (id != null) attributes["id"] = id.id`)
+  lines.push(...staticAttributeLines(componentAttributes))
   if (role) lines.push(`        role = "${role}"`)
   if (fixedInputType) lines.push(`        type = InputType.${fixedInputType}`)
   
@@ -274,9 +299,7 @@ function generateCustomPartFunction(classified, part) {
   const receiver = part.receiver || 'FlowContent'
   const staticAttributes = Object.entries(part.staticAttributes || {})
 
-  const attrDoc = staticAttributes
-    .map(([name, value]) => (value === '' ? ` ${name}` : ` ${name}="${value}"`))
-    .join('')
+  const attrDoc = staticAttributeDoc(staticAttributes)
   const kdocLine = cssClass
     ? `Renders \`<${htmlTag} class="${cssClass} ..."${attrDoc}>\`.`
     : `Structural wrapper. Renders \`<${htmlTag}${attrDoc}>\`.`
@@ -290,9 +313,7 @@ function generateCustomPartFunction(classified, part) {
 
   const body = []
   body.push(`        if (id != null) attributes["id"] = id.id`)
-  for (const [name, value] of staticAttributes) {
-    body.push(`        attributes[${JSON.stringify(name)}] = ${JSON.stringify(value)}`)
-  }
+  body.push(...staticAttributeLines(staticAttributes))
   if (cssClass) {
     body.push(`        addClassNames("${cssClass}")`)
   }
@@ -334,7 +355,7 @@ function collectImports(classified, element, config) {
   }
   
   for (const part of classified.parts) {
-    const partElement = inferPartElement(part)
+    const partElement = partElementFor(part, config)
     imports.add(`kotlinx.html.${partElement}`)
     imports.add(`kotlinx.html.${htmlTagFor(partElement)}`)
   }
@@ -376,7 +397,7 @@ export function generateKotlinFile(classified, elementRules, config) {
   const mainFn = generateMainFunction(classified, element, config)
   
   const partFns = classified.parts.map(partClass => {
-    const partElement = inferPartElement(partClass)
+    const partElement = partElementFor(partClass, config)
     return generatePartFunction(classified, partClass, partElement, config)
   })
   
@@ -386,6 +407,16 @@ export function generateKotlinFile(classified, elementRules, config) {
   const body = [enums, mainFn, ...partFns, ...customPartFns].filter(Boolean).join('\n\n')
   
   return `${header}\n\n${body}\n`
+}
+
+/**
+ * The element a sub-component part renders as. `subComponentElements` wins over the heuristic
+ * below, which guesses from the part's name and cannot know when the choice is load-bearing —
+ * `megamenu-active` must be a `<span>` because the panels beside it are selected by
+ * `:nth-of-type`, and no amount of reading its name says so.
+ */
+function partElementFor(partName, config) {
+  return config?.subComponentElements?.[partName] ?? inferPartElement(partName)
 }
 
 function inferPartElement(partName) {

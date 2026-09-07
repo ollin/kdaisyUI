@@ -1,16 +1,24 @@
 Feature: Megamenu Reference
-  DaisyUI's documented megamenu markup, hand-written, kept so it can be looked at
+  DaisyUI's documented megamenu, kept so it can be looked at
 
   The screenshots land in e2e-tests/build/reports/screenshots/. They exist to be reviewed by a
   human: a megamenu that renders wrongly is something an eye catches and an assertion does not.
-  When task 5.1 rebuilds this page from generated wrappers, the same images prove the rebuild
-  matches the reference.
+  These scenarios were written against the same markup hand-written in raw kotlinx.html, and are
+  unchanged now that the page is built from the generated wrappers — which is what makes them
+  evidence that the wrappers produce the documented construction.
 
   Scenario: The served markup carries the documented megamenu construction
     Then the endpoint "/megamenu-reference" returns status 200
     And the response body contains "class=\"megamenu"
     And the response body contains "popover=\"\""
     And the response body contains "megamenu-active"
+
+  @nojs
+  Scenario: A panel opens with JavaScript disabled
+    Given the user opens "/megamenu-reference"
+    Then the popover "megamenu-panel-one" is closed
+    When the user clicks the button "Components"
+    Then the popover "megamenu-panel-one" is open
 
   Scenario: Megamenu at a desktop viewport
     Given the viewport is 1280 by 800

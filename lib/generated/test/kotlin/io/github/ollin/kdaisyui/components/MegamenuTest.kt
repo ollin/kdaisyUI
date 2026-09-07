@@ -4,6 +4,7 @@ import kotlinx.html.div
 import kotlinx.html.stream.createHTML
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class MegamenuTest {
 
@@ -71,5 +72,24 @@ class MegamenuTest {
         val expectedClasses = "megamenu"
         val actualClasses = html.substringAfter("class=\"").substringBefore("\"").split(" ").sorted().joinToString(" ")
         assertEquals(expectedClasses, actualClasses, "Class mismatch for Megamenu in different sizes")
+    }
+
+    @Test
+    fun renders_static_attributes() {
+        val html = createHTML(prettyPrint = false).div {
+            daisyMegamenu {
+            }
+        }
+        assertTrue(html.contains("popover=\"\""))
+    }
+
+    @Test
+    fun custom_part_panel_renders_div() {
+        val html = createHTML(prettyPrint = false).div {
+            daisyMegamenuPanel {
+            }
+        }
+        assertTrue(html.contains("<div"))
+        assertTrue(html.contains("popover=\"\""))
     }
 }

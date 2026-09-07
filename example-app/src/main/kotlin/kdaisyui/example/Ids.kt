@@ -2,6 +2,20 @@ package kdaisyui.example
 
 import io.github.ollin.kdaisyui.core.AnnotatedIdBase
 
+/**
+ * IDs for the standalone megamenu reference page.
+ *
+ * Every one of these is used twice — once as an element's `id`, once as the `popovertarget` that
+ * opens it — and DaisyUI's rule is that the two must match. Deriving both from one object is what
+ * makes a trigger pointing at a panel that does not exist a compile error rather than a page that
+ * silently does nothing.
+ */
+class Megamenu : AnnotatedIdBase("megamenu") {
+    class Reference(parent: Megamenu = Megamenu()) : AnnotatedIdBase("reference", parent)
+    class PanelOne(parent: Megamenu = Megamenu()) : AnnotatedIdBase("panel-one", parent)
+    class PanelTwo(parent: Megamenu = Megamenu()) : AnnotatedIdBase("panel-two", parent)
+}
+
 class Dashboard : AnnotatedIdBase("dashboard") {
     class Drawer(parent: Dashboard = Dashboard()) : AnnotatedIdBase("drawer", parent)
     class Search(parent: Dashboard = Dashboard()) : AnnotatedIdBase("search", parent)
@@ -27,7 +41,9 @@ class Dashboard : AnnotatedIdBase("dashboard") {
 
     class WhatsNew(parent: Dashboard = Dashboard()) : AnnotatedIdBase("whats-new", parent) {
         class Otp(parent: WhatsNew = WhatsNew()) : AnnotatedIdBase("otp", parent)
-        class Megamenu(parent: WhatsNew = WhatsNew()) : AnnotatedIdBase("megamenu", parent)
+        class Megamenu(parent: WhatsNew = WhatsNew()) : AnnotatedIdBase("megamenu", parent) {
+            class Panel(parent: Megamenu = Megamenu()) : AnnotatedIdBase("panel", parent)
+        }
     }
 
     class Repo(parent: Dashboard = Dashboard()) : AnnotatedIdBase("repo", parent) {

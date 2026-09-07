@@ -103,6 +103,33 @@ immune, and they are the only call style this project can keep stable across Dai
 daisyTooltip("Hint", left = true) { … }
 ```
 
+### How to migrate from 0.3.x
+
+**`daisyMegamenuActive` now renders a `<span>`, not a `<div>`.** Its `attrs` and `content`
+lambdas therefore receive `SPAN` instead of `DIV`:
+
+```kotlin
+// before
+daisyMegamenuActive(attrs = { /* this: DIV */ }) { /* this: DIV */ }
+
+// after
+daisyMegamenuActive(attrs = { /* this: SPAN */ }) { /* this: SPAN */ }
+```
+
+Most call sites need no edit — an empty body, `+"text"`, or anything reached through
+`attributes[…]` compiles unchanged. Only code naming `DIV` explicitly, or calling a
+`DIV`-specific member, breaks, and it breaks at compile time.
+
+Why it changed: DaisyUI documents this element as a `<span>` and calls it mandatory.
+`megamenu.css` picks the open panel with `[popover]:nth-of-type(N)`, and `:nth-of-type` counts
+among siblings of the *same tag*. The panels are `<div popover>`, so a `<div>` indicator took
+div index 1 and shifted every panel by one — the indicator slid under the trigger *after* the
+one whose panel was open.
+
+Note that `lib/api/lib.api` does not show this change: both lambda types erase to
+`Function1`, so the ABI dump — and the `api-baseline` CI gate that reads it — cannot see a
+changed lambda receiver. That gate catches removals and arity changes, not this.
+
 ## Quick start
 
 ### 1. Add the dependency

@@ -43,62 +43,84 @@ as an E2E scenario that saves screenshots to disk. Two reasons, both better than
 
 ## 2. Teach the generator to put static attributes on a main component
 
-- [ ] 2.1 Lift `staticAttributes` from `generateCustomPartFunction` to the main component path in
+- [x] 2.1 Lift `staticAttributes` from `generateCustomPartFunction` to the main component path in
   `codegen/src/generator-new.js`, reading a new `componentAttributes` config key. No component
   declares it yet, so `just generate` must produce a **zero diff** — that is the proof it changed
   nothing.
   → `. r`
 
-- [ ] 2.2 Mirror it in `codegen/src/test-generator.js` so the generated component test asserts the
+- [x] 2.2 Mirror it in `codegen/src/test-generator.js` so the generated component test asserts the
   attribute. Zero diff for the same reason.
   → `. r`
 
 ## 3. Configure megamenu
 
-- [ ] 3.1 Add the `componentAttributes` entry for `megamenu` and the `customParts` entry for its
+- [x] 3.1 Add the `componentAttributes` entry for `megamenu` and the `customParts` entry for its
   inner panel (`cssClass: null`, `staticAttributes: { "popover": "" }`). Config only.
   → `. r`
 
-- [ ] 3.2 Run `just generate`, review the diff under `lib/generated/`, commit the regenerated
+- [x] 3.2 Run `just generate`, review the diff under `lib/generated/`, commit the regenerated
   output. The new public wrapper and its generated tests land together.
   → `. F` — regeneration is tool-produced and drift-checked; precedent `2297257`
 
-- [ ] 3.3 Re-dump the API baseline with `just update-api` and **read the diff**. This is an
+- [x] 3.3 Re-dump the API baseline with `just update-api` and **read the diff**. This is an
   additive change, so no `README.md` migration entry should be needed — confirm that rather than
   assume it.
   → `. r`
 
 ## 4. Hold the gates
 
-- [ ] 4.1 `:lib:test` and root `koverVerify` with `--rerun-tasks`. Any uncovered branch is fixed in
+- [x] 4.1 `:lib:test` and root `koverVerify` with `--rerun-tasks`. Any uncovered branch is fixed in
   the *test generator*, never in the generated file.
   → `^ f` (or `. d` if already green)
 
-- [ ] 4.2 Confirm `generated-sources-drift` and `api-baseline` both pass on the branch.
+- [x] 4.2 Confirm `generated-sources-drift` and `api-baseline` both pass on the branch.
   → `. d`
 
 ## 5. Prove it opens in a browser
 
-- [ ] 5.1 Replace the megamenu card in `example-app`'s `WhatsNewFragment.kt` with one built from
+- [x] 5.1 Replace the megamenu card in `example-app`'s `WhatsNewFragment.kt` with one built from
   the generated wrappers and opened by a `popovertarget` button — or give it its own route if the
   htmx-loaded fragment cannot be reached with JavaScript disabled, as was the case for the modal.
   Decide which from 1.1's finding.
   → `. r` for the page, then `^ F` with its scenario — a route with no test cannot be `^`
   (the lesson from `support-popover-modals` 5.1)
 
-- [ ] 5.2 Add a Cucumber scenario asserting the served HTML carries `class="megamenu"` and
+- [x] 5.2 Add a Cucumber scenario asserting the served HTML carries `class="megamenu"` and
   `popover`, and — tagged `@nojs` — that a panel reaches `:popover-open` on a click. The `@nojs`
   hook and the `:popover-open` steps already exist from `support-popover-modals`.
   → `^ F`
 
 ## 6. Settle the two loose ends this change found
 
-- [ ] 6.1 Decide whether `megamenu-active` must be a `<span>` (DaisyUI documents it so and calls
-  it mandatory; the generator emits a `div`). Fix via `subComponentElements` if it matters, record
-  that it does not if it does not.
-  → `. r` or `. d`
+**Correction (found while doing 6.1).** Two assumptions in the original task were wrong, and both
+change what it costs. Measured, not reasoned: a Playwright probe on `/megamenu-reference` reports
+`--mm-anchor: --mm2` on the megamenu root while panel **one** is open, with
+`CSS.supports('anchor-name')` true, so the mechanism is live and the reading is not an artefact of
+an unsupported feature.
 
-- [ ] 6.2 Update the `kdaisyui-codegen` skill: `componentAttributes` next to `staticAttributes`,
+- **It matters — but not for the reason the task implied.** `.megamenu-active` is styled by class
+  alone and is `position: absolute`, so a `span` and a `div` compute the same box. What breaks is
+  its SIBLINGS: `daisyui/packages/daisyui/src/components/megamenu.css:78-96` selects the open panel
+  with `[popover]:nth-of-type(N)`, and `:nth-of-type` counts among siblings of the same tag name.
+  The panels are `<div popover>`, so a `<div>` indicator takes div index 1 and shifts every panel
+  by one — the indicator anchors to the trigger *after* the one whose panel is open. DaisyUI
+  calling the `<span>` mandatory is accurate.
+- **`subComponentElements` does not exist.** It is declared in `codegen-config.json` with two
+  entries, but nothing reads it — `inferPartElement` in `generator-new.js` is a hardcoded
+  heuristic that happens to return exactly what both entries say, which is why dead config went
+  unnoticed. So the task's prescribed remedy has to be built before it can be used.
+
+- [x] 6.1a Wire `subComponentElements` into `inferPartElement`, config taking precedence over the
+  heuristic. The two entries already present are what the heuristic already returns, so
+  `just generate` must produce a **zero diff** — the same proof used in 2.1.
+  → `. r`
+
+- [x] 6.1b Set `"megamenu-active": "SPAN"` and regenerate, with the E2E assertion that the
+  indicator tracks the open panel's trigger. Red and green land together.
+  → `^ B`
+
+- [x] 6.2 Update the `kdaisyui-codegen` skill: `componentAttributes` next to `staticAttributes`,
   and remove megamenu from the list of components still carrying this defect — that line was added
   by `support-popover-modals` and becomes false here.
   → `. d`

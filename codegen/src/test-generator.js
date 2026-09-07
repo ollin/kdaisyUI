@@ -157,15 +157,41 @@ function mapClassesToParams(classes, classToParam) {
   return params
 }
 
+/** One `assertTrue` per statically-emitted attribute, indented for a test body. */
+function staticAttributeAssertions(attributes) {
+  return Object.entries(attributes || {}).map(
+    ([name, value]) => `        assertTrue(html.contains("${name}=\\"${value}\\""))`,
+  )
+}
+
 function customPartAssertions(part, tag) {
   const assertions = [`        assertTrue(html.contains("<${tag}"))`]
   if (part.cssClass) {
     assertions.push(`        assertTrue(html.contains("class=\\"${part.cssClass}"))`)
   }
-  for (const [name, value] of Object.entries(part.staticAttributes || {})) {
-    assertions.push(`        assertTrue(html.contains("${name}=\\"${value}\\""))`)
-  }
+  assertions.push(...staticAttributeAssertions(part.staticAttributes))
   return assertions.join('\n')
+}
+
+/**
+ * Pins the attributes the main component emits unconditionally. The class-mismatch tests
+ * compare only the class attribute, so an attribute that carries no CSS class would
+ * otherwise be invisible to both the generated tests and generated-sources-drift.
+ */
+function generateComponentAttributeTest(className, componentAttributes) {
+  const assertions = staticAttributeAssertions(componentAttributes)
+  if (assertions.length === 0) return ''
+
+  return `
+    @Test
+    fun renders_static_attributes() {
+        val html = createHTML(prettyPrint = false).div {
+            daisy${className} {
+            }
+        }
+${assertions.join('\n')}
+    }
+`
 }
 
 function generateCustomPartTests(className, customParts) {
@@ -200,20 +226,70 @@ function htmlTagFnFor(tag) {
   return exceptions[tag] ?? tag
 }
 
+/** Reads a component-keyed config section, e.g. `customParts.modal`. */
+function configSection(config, section, componentName, fallback) {
+  return config?.[section]?.[componentName] ?? fallback
+}
+
+/** Suffixes `_2`, `_3`, … until the name is free, and records it as taken. */
+function uniqueTestName(usedNames, funcName) {
+  let name = funcName
+  let counter = 2
+  while (usedNames.has(name)) {
+    name = `${funcName}_${counter}`
+    counter++
+  }
+  usedNames.add(name)
+  return name
+}
+
+/** The classes the generator will emit for the classes a doc example carries. */
+function expectedClassesFor(containerClasses, componentClass) {
+  const generated = [componentClass]
+  for (const c of containerClasses) {
+    if (c === componentClass) continue
+    generated.push(c.startsWith(`${componentClass}-`) ? c : `${componentClass}-${c}`)
+  }
+  return generated.sort().join(' ')
+}
+
+function paramsToArgs(params) {
+  return Object.entries(params)
+    .filter(([k, v]) => v === true)
+    .map(([k, v]) => `${k} = true`)
+    .join(', ')
+}
+
+/** Asserts the component emits exactly the classes the doc example shows. */
+function generateClassTest(className, { testName, args, expectedClasses, caseName }) {
+  return `
+    @Test
+    fun ${testName}() {
+        val html = createHTML(prettyPrint = false).div {
+            daisy${className}(${args}) {
+            }
+        }
+        val expectedClasses = "${expectedClasses}"
+        val actualClasses = html.substringAfter("class=\\"").substringBefore("\\"").split(" ").sorted().joinToString(" ")
+        assertEquals(expectedClasses, actualClasses, "Class mismatch for ${caseName}")
+    }
+`
+}
+
 function generateKotlinTest(componentName, testCases, frontmatter, config) {
   const className = toClassName(componentName)
-  const { allowedClasses, classToParam, paramToGeneratedClass, componentClass } = buildClassMappings(frontmatter, componentName)
-  const customParts = config?.customParts?.[componentName] || []
-  const hasCustomParts = customParts.length > 0
+  const { allowedClasses, classToParam, componentClass } = buildClassMappings(frontmatter, componentName)
+  const customParts = configSection(config, 'customParts', componentName, [])
+  const attributeTest = generateComponentAttributeTest(className, configSection(config, 'componentAttributes', componentName, {}))
   
   const extraImports = new Set()
-  if (hasCustomParts) {
+  if (customParts.length > 0 || attributeTest) {
     extraImports.add('import kotlin.test.assertTrue')
-    for (const part of customParts) {
-      const receiver = part.receiver || 'FlowContent'
-      if (receiver !== 'FlowContent') {
-        extraImports.add(`import kotlinx.html.${htmlTagFnFor(receiver.toLowerCase())}`)
-      }
+  }
+  for (const part of customParts) {
+    const receiver = part.receiver || 'FlowContent'
+    if (receiver !== 'FlowContent') {
+      extraImports.add(`import kotlinx.html.${htmlTagFnFor(receiver.toLowerCase())}`)
     }
   }
   const extraImportLines = [...extraImports].sort().join('\n')
@@ -231,51 +307,16 @@ class ${className}Test {
   const usedNames = new Set()
   
   for (const tc of testCases) {
-    let funcName = toTestFunctionName(tc.name)
-    
-    let uniqueName = funcName
-    let counter = 2
-    while (usedNames.has(uniqueName)) {
-      uniqueName = `${funcName}_${counter}`
-      counter++
-    }
-    usedNames.add(uniqueName)
-    
-    const allClasses = extractDaisyClasses(tc.html)
-    const containerClasses = filterContainerClasses(allClasses, allowedClasses)
-    const params = mapClassesToParams(containerClasses, classToParam)
-    
-    const paramStr = Object.entries(params)
-      .filter(([k, v]) => v === true)
-      .map(([k, v]) => `${k} = true`)
-      .join(', ')
-    
-    const generatedClasses = [componentClass]
-    for (const c of containerClasses) {
-      if (c !== componentClass) {
-        if (c.startsWith(`${componentClass}-`)) {
-          generatedClasses.push(c)
-        } else {
-          generatedClasses.push(`${componentClass}-${c}`)
-        }
-      }
-    }
-    const expectedClasses = generatedClasses.sort().join(' ')
-    
-    kotlin += `
-    @Test
-    fun ${uniqueName}() {
-        val html = createHTML(prettyPrint = false).div {
-            daisy${className}(${paramStr}) {
-            }
-        }
-        val expectedClasses = "${expectedClasses}"
-        val actualClasses = html.substringAfter("class=\\"").substringBefore("\\"").split(" ").sorted().joinToString(" ")
-        assertEquals(expectedClasses, actualClasses, "Class mismatch for ${tc.name}")
-    }
-`
+    const containerClasses = filterContainerClasses(extractDaisyClasses(tc.html), allowedClasses)
+    kotlin += generateClassTest(className, {
+      testName: uniqueTestName(usedNames, toTestFunctionName(tc.name)),
+      args: paramsToArgs(mapClassesToParams(containerClasses, classToParam)),
+      expectedClasses: expectedClassesFor(containerClasses, componentClass),
+      caseName: tc.name,
+    })
   }
   
+  kotlin += attributeTest
   kotlin += generateCustomPartTests(className, customParts)
   
   kotlin += `}

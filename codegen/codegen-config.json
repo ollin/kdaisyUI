@@ -197,7 +197,11 @@
   },
   "subComponentElements": {
     "card-title": "H2",
-    "card-actions": "DIV"
+    "card-actions": "DIV",
+    "megamenu-active": "SPAN"
+  },
+  "componentAttributes": {
+    "megamenu": { "popover": "" }
   },
   "customParts": {
     "breadcrumbs": [
@@ -209,6 +213,14 @@
         "name": "Popover",
         "element": "DIV",
         "cssClass": "modal",
+        "staticAttributes": { "popover": "" }
+      }
+    ],
+    "megamenu": [
+      {
+        "name": "Panel",
+        "element": "DIV",
+        "cssClass": null,
         "staticAttributes": { "popover": "" }
       }
     ]

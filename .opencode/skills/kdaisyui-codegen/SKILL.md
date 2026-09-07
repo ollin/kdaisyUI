@@ -99,7 +99,9 @@ Worked example: 5.6.0 added HTML-popover modals (`<div class="modal" popover>` d
 `<dialog>` only, so that method was unreachable — and no test failed and no drift appeared,
 because nothing about it is a class name. Only the changelog surfaced it. It went unnoticed long
 enough to be archived as delivered; `daisyModalPopover` and `staticAttributes` (below) are the
-fix. **`megamenu` still has it**, so the example is live, not historical.
+fix. `megamenu` carried the same defect until `support-popover-megamenu`, which added
+`componentAttributes` for it — so the example is historical, but the blind spot it came from is
+not: nothing in the class-based safety net would catch the next one either.
 
 Record what you find as an issue or an OpenSpec change; do not fold it into the dependency PR.
 
@@ -140,6 +142,8 @@ pipeline instead.
 | Wrong HTML role or input type | → `roles`, `inputTypes` |
 | Component should not be generated at all | → `skip` (currently `accordion`, `pagination`) |
 | Component needs a second wrapper / an alternative construction method | → `customParts` |
+| Main component must always carry an attribute (e.g. `popover`) | → `componentAttributes` |
+| A sub-component part must be a specific element | → `subComponentElements` |
 | CSS class lands in the wrong category | `codegen/src/classifier.js` |
 | Kotlin output shape is wrong | `codegen/src/generator-new.js` |
 | Generated tests are wrong | `codegen/src/test-generator.js` |
@@ -194,9 +198,50 @@ otherwise invisible to the whole safety net, because both the generated tests an
 `generated-sources-drift` key on class names. That blind spot is how the popover modal was
 recorded as delivered while `daisyModal` still emitted only `<dialog>`.
 
-**`megamenu` has the same unfixed defect today:** DaisyUI documents it as
-`<div class="megamenu …" popover>` opened by a `popovertarget` button, and `daisyMegamenu`
-emits no `popover`.
+### The same attribute on the MAIN component is `componentAttributes`
+
+`staticAttributes` reaches only `customParts` entries — a component's extra wrappers. When the
+attribute belongs on the component's own function, the one carrying the size and modifier
+parameters, use the sibling key:
+
+```json
+"componentAttributes": {
+  "megamenu": { "popover": "" }
+}
+```
+
+That makes `daisyMegamenu` emit `<div class="megamenu …" popover>`. Same placement rules as
+`staticAttributes` — after `id`, before `extraClasses`, so `attrs()` still runs last — and
+`test-generator.js` mirrors it as a `renders_static_attributes` test.
+
+Two keys rather than one because they address different functions. If a third case turns up,
+that is the moment to unify them.
+
+### `subComponentElements` overrides the part-element heuristic
+
+`inferPartElement` guesses a part's element from its name, and a name cannot say when the choice
+is load-bearing. `megamenu-active` has to be a `<span>`: DaisyUI selects the open panel with
+`[popover]:nth-of-type(N)`, `:nth-of-type` counts among siblings of the same tag, and a `<div>`
+indicator takes div index 1 and shifts every `<div popover>` panel by one.
+
+```json
+"subComponentElements": { "megamenu-active": "SPAN" }
+```
+
+Worth knowing how that was found: the key sat in the config with two entries and **nothing read
+it** until `support-popover-megamenu`. It went unnoticed because the heuristic happened to
+return exactly what both entries said.
+
+**Neither key is visible to the class-based safety net.** Generated tests and
+`generated-sources-drift` both key on class names, so an attribute or an element choice that
+changes no class is invisible to them — which is how the popover modal was recorded as delivered
+while `daisyModal` still emitted only `<dialog>`. `megamenu` carried the same defect until
+`support-popover-megamenu` fixed it; only an E2E that measures the rendered page catches this
+class of thing.
+
+**And the `api-baseline` gate does not catch a changed lambda receiver.** Turning
+`daisyMegamenuActive` from `DIV` to `SPAN` broke compilation for callers and produced **no**
+diff in `lib/api/lib.api`, because both lambda types erase to `Function1`.
 
 ## Pipeline
 

@@ -9,6 +9,8 @@ import io.github.ollin.kdaisyui.core.HtmlId
 import kotlinx.html.div
 import kotlinx.html.DIV
 import kotlinx.html.FlowContent
+import kotlinx.html.span
+import kotlinx.html.SPAN
 
 /** Size variants for this component (CSS prefix: `megamenu-`) */
 enum class MegamenuSize(internal val className: String) {
@@ -26,7 +28,7 @@ enum class MegamenuSize(internal val className: String) {
 
 
 /**
- * A megamenu is a large, horizontal menu where each item opens a popover to show a large block of navigation links. Megamenu must be used once, on top of the page. Inside each popover, you can use a daisyUI menu, or any custom content. Megamenu fits better on large screens only, and for small screens, you can hide the megamenu and show the content in a dropdown or a drawer. Renders `<div class="megamenu ...">`.
+ * A megamenu is a large, horizontal menu where each item opens a popover to show a large block of navigation links. Megamenu must be used once, on top of the page. Inside each popover, you can use a daisyUI menu, or any custom content. Megamenu fits better on large screens only, and for small screens, you can hide the megamenu and show the content in a dropdown or a drawer. Renders `<div class="megamenu ..." popover>`.
  * @param id — Type-safe HTML id attribute from [HtmlId] hierarchy
  * @param size — Size variant
  * @param full — megamenu dropdown will fill the entire width of the page
@@ -48,6 +50,7 @@ fun FlowContent.daisyMegamenu(
 ) {
     div {
         if (id != null) attributes["id"] = id.id
+        attributes["popover"] = ""
         addClassNames("megamenu")
         if (size != null) addClassNames(size.className)
         if (full) addClassNames("megamenu-full")
@@ -59,8 +62,24 @@ fun FlowContent.daisyMegamenu(
     }
 }
 
-/** Renders `<div class="megamenu-active ...">`. */
+/** Renders `<span class="megamenu-active ...">`. */
 fun FlowContent.daisyMegamenuActive(
+    id: HtmlId? = null,
+    extraClasses: String? = null,
+    attrs: (SPAN.() -> Unit)? = null,
+    content: (SPAN.() -> Unit),
+) {
+    span {
+        if (id != null) attributes["id"] = id.id
+        addClassNames("megamenu-active")
+        addClassNames(extraClasses)
+        if (attrs != null) attrs()
+        content()
+    }
+}
+
+/** Structural wrapper. Renders `<div popover>`. */
+fun FlowContent.daisyMegamenuPanel(
     id: HtmlId? = null,
     extraClasses: String? = null,
     attrs: (DIV.() -> Unit)? = null,
@@ -68,7 +87,7 @@ fun FlowContent.daisyMegamenuActive(
 ) {
     div {
         if (id != null) attributes["id"] = id.id
-        addClassNames("megamenu-active")
+        attributes["popover"] = ""
         addClassNames(extraClasses)
         if (attrs != null) attrs()
         content()
