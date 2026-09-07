@@ -55,7 +55,7 @@ as an E2E scenario that saves screenshots to disk. Two reasons, both better than
 
 ## 3. Configure megamenu
 
-- [ ] 3.1 Add the `componentAttributes` entry for `megamenu` and the `customParts` entry for its
+- [x] 3.1 Add the `componentAttributes` entry for `megamenu` and the `customParts` entry for its
   inner panel (`cssClass: null`, `staticAttributes: { "popover": "" }`). Config only.
   → `. r`
 
