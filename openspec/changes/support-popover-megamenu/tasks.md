@@ -93,10 +93,32 @@ as an E2E scenario that saves screenshots to disk. Two reasons, both better than
 
 ## 6. Settle the two loose ends this change found
 
-- [ ] 6.1 Decide whether `megamenu-active` must be a `<span>` (DaisyUI documents it so and calls
-  it mandatory; the generator emits a `div`). Fix via `subComponentElements` if it matters, record
-  that it does not if it does not.
-  → `. r` or `. d`
+**Correction (found while doing 6.1).** Two assumptions in the original task were wrong, and both
+change what it costs. Measured, not reasoned: a Playwright probe on `/megamenu-reference` reports
+`--mm-anchor: --mm2` on the megamenu root while panel **one** is open, with
+`CSS.supports('anchor-name')` true, so the mechanism is live and the reading is not an artefact of
+an unsupported feature.
+
+- **It matters — but not for the reason the task implied.** `.megamenu-active` is styled by class
+  alone and is `position: absolute`, so a `span` and a `div` compute the same box. What breaks is
+  its SIBLINGS: `daisyui/packages/daisyui/src/components/megamenu.css:78-96` selects the open panel
+  with `[popover]:nth-of-type(N)`, and `:nth-of-type` counts among siblings of the same tag name.
+  The panels are `<div popover>`, so a `<div>` indicator takes div index 1 and shifts every panel
+  by one — the indicator anchors to the trigger *after* the one whose panel is open. DaisyUI
+  calling the `<span>` mandatory is accurate.
+- **`subComponentElements` does not exist.** It is declared in `codegen-config.json` with two
+  entries, but nothing reads it — `inferPartElement` in `generator-new.js` is a hardcoded
+  heuristic that happens to return exactly what both entries say, which is why dead config went
+  unnoticed. So the task's prescribed remedy has to be built before it can be used.
+
+- [ ] 6.1a Wire `subComponentElements` into `inferPartElement`, config taking precedence over the
+  heuristic. The two entries already present are what the heuristic already returns, so
+  `just generate` must produce a **zero diff** — the same proof used in 2.1.
+  → `. r`
+
+- [ ] 6.1b Set `"megamenu-active": "SPAN"` and regenerate, with the E2E assertion that the
+  indicator tracks the open panel's trigger. Red and green land together.
+  → `^ B`
 
 - [ ] 6.2 Update the `kdaisyui-codegen` skill: `componentAttributes` next to `staticAttributes`,
   and remove megamenu from the list of components still carrying this defect — that line was added
