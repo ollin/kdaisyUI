@@ -12,6 +12,13 @@ Feature: Megamenu Reference
     And the response body contains "popover=\"\""
     And the response body contains "megamenu-active"
 
+  @nojs
+  Scenario: A panel opens with JavaScript disabled
+    Given the user opens "/megamenu-reference"
+    Then the popover "megamenu-panel-one" is closed
+    When the user clicks the button "Components"
+    Then the popover "megamenu-panel-one" is open
+
   Scenario: Megamenu at a desktop viewport
     Given the viewport is 1280 by 800
     And the user opens "/megamenu-reference"
