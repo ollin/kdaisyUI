@@ -355,7 +355,7 @@ function collectImports(classified, element, config) {
   }
   
   for (const part of classified.parts) {
-    const partElement = inferPartElement(part)
+    const partElement = partElementFor(part, config)
     imports.add(`kotlinx.html.${partElement}`)
     imports.add(`kotlinx.html.${htmlTagFor(partElement)}`)
   }
@@ -397,7 +397,7 @@ export function generateKotlinFile(classified, elementRules, config) {
   const mainFn = generateMainFunction(classified, element, config)
   
   const partFns = classified.parts.map(partClass => {
-    const partElement = inferPartElement(partClass)
+    const partElement = partElementFor(partClass, config)
     return generatePartFunction(classified, partClass, partElement, config)
   })
   
@@ -407,6 +407,16 @@ export function generateKotlinFile(classified, elementRules, config) {
   const body = [enums, mainFn, ...partFns, ...customPartFns].filter(Boolean).join('\n\n')
   
   return `${header}\n\n${body}\n`
+}
+
+/**
+ * The element a sub-component part renders as. `subComponentElements` wins over the heuristic
+ * below, which guesses from the part's name and cannot know when the choice is load-bearing —
+ * `megamenu-active` must be a `<span>` because the panels beside it are selected by
+ * `:nth-of-type`, and no amount of reading its name says so.
+ */
+function partElementFor(partName, config) {
+  return config?.subComponentElements?.[partName] ?? inferPartElement(partName)
 }
 
 function inferPartElement(partName) {
