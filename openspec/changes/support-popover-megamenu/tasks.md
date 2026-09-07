@@ -74,7 +74,7 @@ as an E2E scenario that saves screenshots to disk. Two reasons, both better than
   the *test generator*, never in the generated file.
   → `^ f` (or `. d` if already green)
 
-- [ ] 4.2 Confirm `generated-sources-drift` and `api-baseline` both pass on the branch.
+- [x] 4.2 Confirm `generated-sources-drift` and `api-baseline` both pass on the branch.
   → `. d`
 
 ## 5. Prove it opens in a browser
