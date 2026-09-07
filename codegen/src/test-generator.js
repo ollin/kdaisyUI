@@ -157,15 +157,41 @@ function mapClassesToParams(classes, classToParam) {
   return params
 }
 
+/** One `assertTrue` per statically-emitted attribute, indented for a test body. */
+function staticAttributeAssertions(attributes) {
+  return Object.entries(attributes || {}).map(
+    ([name, value]) => `        assertTrue(html.contains("${name}=\\"${value}\\""))`,
+  )
+}
+
 function customPartAssertions(part, tag) {
   const assertions = [`        assertTrue(html.contains("<${tag}"))`]
   if (part.cssClass) {
     assertions.push(`        assertTrue(html.contains("class=\\"${part.cssClass}"))`)
   }
-  for (const [name, value] of Object.entries(part.staticAttributes || {})) {
-    assertions.push(`        assertTrue(html.contains("${name}=\\"${value}\\""))`)
-  }
+  assertions.push(...staticAttributeAssertions(part.staticAttributes))
   return assertions.join('\n')
+}
+
+/**
+ * Pins the attributes the main component emits unconditionally. The class-mismatch tests
+ * compare only the class attribute, so an attribute that carries no CSS class would
+ * otherwise be invisible to both the generated tests and generated-sources-drift.
+ */
+function generateComponentAttributeTest(className, componentAttributes) {
+  const assertions = staticAttributeAssertions(componentAttributes)
+  if (assertions.length === 0) return ''
+
+  return `
+    @Test
+    fun renders_static_attributes() {
+        val html = createHTML(prettyPrint = false).div {
+            daisy${className} {
+            }
+        }
+${assertions.join('\n')}
+    }
+`
 }
 
 function generateCustomPartTests(className, customParts) {
@@ -254,9 +280,10 @@ function generateKotlinTest(componentName, testCases, frontmatter, config) {
   const className = toClassName(componentName)
   const { allowedClasses, classToParam, componentClass } = buildClassMappings(frontmatter, componentName)
   const customParts = configSection(config, 'customParts', componentName, [])
+  const attributeTest = generateComponentAttributeTest(className, configSection(config, 'componentAttributes', componentName, {}))
   
   const extraImports = new Set()
-  if (customParts.length > 0) {
+  if (customParts.length > 0 || attributeTest) {
     extraImports.add('import kotlin.test.assertTrue')
   }
   for (const part of customParts) {
@@ -289,6 +316,7 @@ class ${className}Test {
     })
   }
   
+  kotlin += attributeTest
   kotlin += generateCustomPartTests(className, customParts)
   
   kotlin += `}
