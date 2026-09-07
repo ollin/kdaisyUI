@@ -120,7 +120,7 @@ an unsupported feature.
   indicator tracks the open panel's trigger. Red and green land together.
   → `^ B`
 
-- [ ] 6.2 Update the `kdaisyui-codegen` skill: `componentAttributes` next to `staticAttributes`,
+- [x] 6.2 Update the `kdaisyui-codegen` skill: `componentAttributes` next to `staticAttributes`,
   and remove megamenu from the list of components still carrying this defect — that line was added
   by `support-popover-modals` and becomes false here.
   → `. d`
