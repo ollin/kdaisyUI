@@ -81,15 +81,25 @@ function getAllBooleanParams(classified, extras, config, componentName) {
   return booleans.sort()
 }
 
+/** Reads a component-keyed config section, e.g. `roles.button`. */
+function componentSetting(config, section, componentName, fallback) {
+  return config?.[section]?.[componentName.toLowerCase()] ?? fallback
+}
+
+/** Tests membership in a config section that is a flat list of component names. */
+function componentListed(config, section, componentName) {
+  return config?.[section]?.includes(componentName.toLowerCase()) ?? false
+}
+
 function generateMainFunction(classified, element, config) {
   const { componentName, prefix, desc, descs } = classified
   const htmlTag = htmlTagFor(element)
-  const extras = config?.extras?.[classified.componentName.toLowerCase()] || []
+  const extras = componentSetting(config, 'extras', componentName, [])
   const booleans = getAllBooleanParams(classified, extras, config, componentName)
-  const hasTextParam = config?.textParams?.includes(classified.componentName.toLowerCase()) || false
-  const noContent = config?.noContent?.includes(classified.componentName.toLowerCase()) || false
-  const role = config?.roles?.[classified.componentName.toLowerCase()]
-  const fixedInputType = config?.inputTypes?.[classified.componentName.toLowerCase()]
+  const hasTextParam = componentListed(config, 'textParams', componentName)
+  const noContent = componentListed(config, 'noContent', componentName)
+  const role = componentSetting(config, 'roles', componentName)
+  const fixedInputType = componentSetting(config, 'inputTypes', componentName)
   
   const kdoc = generateFunctionKdoc(classified, element, { booleans, extras, hasTextParam, noContent })
 
@@ -131,9 +141,8 @@ function generateFunctionKdoc(classified, element, options) {
   const htmlTag = htmlTagFor(element)
   const lines = []
 
-  const firstLine = desc
-    ? `${desc} Renders \`<${htmlTag} class="${prefix} ...">\`.`
-    : `Renders \`<${htmlTag} class="${prefix} ...">\`.`
+  const rendersTag = `Renders \`<${htmlTag} class="${prefix} ...">\`.`
+  const firstLine = desc ? `${desc} ${rendersTag}` : rendersTag
   lines.push(firstLine)
 
   if (hasTextParam) {
