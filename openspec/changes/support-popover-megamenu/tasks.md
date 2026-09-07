@@ -70,7 +70,7 @@ as an E2E scenario that saves screenshots to disk. Two reasons, both better than
 
 ## 4. Hold the gates
 
-- [ ] 4.1 `:lib:test` and root `koverVerify` with `--rerun-tasks`. Any uncovered branch is fixed in
+- [x] 4.1 `:lib:test` and root `koverVerify` with `--rerun-tasks`. Any uncovered branch is fixed in
   the *test generator*, never in the generated file.
   → `^ f` (or `. d` if already green)
 
