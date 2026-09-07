@@ -1,18 +1,21 @@
 package kdaisyui.example
 
+import io.github.ollin.kdaisyui.components.daisyButton
+import io.github.ollin.kdaisyui.components.daisyMegamenu
+import io.github.ollin.kdaisyui.components.daisyMegamenuActive
+import io.github.ollin.kdaisyui.components.daisyMegamenuPanel
+import io.github.ollin.kdaisyui.core.HtmlId
 import kotlinx.html.*
 
 /**
- * DaisyUI's documented megamenu markup, **hand-written on purpose**.
+ * DaisyUI's documented megamenu, built from the generated wrappers.
  *
- * This is the reference the generated wrappers are measured against. It is written with raw
- * `kotlinx.html` rather than `daisyMegamenu`, so that what it renders is DaisyUI's markup and
- * nothing of ours — which is the only way it can answer whether the generated version is right.
- *
- * `daisyMegamenu` today emits no `popover` attribute and there is no wrapper for the panels, so
- * the component as generated cannot open. When `support-popover-megamenu` task 5.1 rebuilds this
- * page from generated wrappers, the screenshots this page produces are what prove the rebuild
- * matches.
+ * This page began as the same markup hand-written in raw `kotlinx.html`, because task 1.1 needed
+ * it to answer a question about DaisyUI's markup without the DSL in the way. It now renders
+ * through `daisyMegamenu` / `daisyMegamenuPanel` instead, and the scenarios and screenshots that
+ * were written against the hand-written version are unchanged — which is what makes them proof
+ * that the generated wrappers produce the documented construction rather than merely something
+ * that renders.
  *
  * Source: `daisyui/skills/daisyui/components/megamenu.md:14-30`.
  */
@@ -27,25 +30,24 @@ fun HTML.megamenuReferencePage() {
     body("bg-base-200 min-h-screen p-10") {
         h1("text-xl font-bold mb-6") { +"Megamenu reference" }
         p("mb-6 text-sm opacity-70") {
-            +"DaisyUI's documented markup, hand-written. The trigger button below is hidden at "
-            +"the sm breakpoint and up, where the megamenu is meant to render as a horizontal bar."
+            +"DaisyUI's documented markup, from the generated wrappers. The trigger button below "
+            +"is hidden at the sm breakpoint and up, where the megamenu renders as a horizontal bar."
         }
 
-        button(classes = "btn sm:hidden") {
-            attributes["popovertarget"] = "megamenu-reference"
-            +"Menu"
-        }
+        daisyButton(
+            text = "Menu",
+            extraClasses = "sm:hidden",
+            attrs = { attributes["popovertarget"] = Megamenu.Reference().id },
+        )
 
-        div("megamenu max-sm:megamenu-vertical p-2 border border-base-300") {
-            id = "megamenu-reference"
-            attributes["popover"] = ""
+        daisyMegamenu(
+            id = Megamenu.Reference(),
+            extraClasses = "max-sm:megamenu-vertical p-2 border border-base-300",
+        ) {
+            daisyMegamenuActive { }
 
-            span("megamenu-active") { }
-
-            button { attributes["popovertarget"] = "megamenu-panel-one"; +"Components" }
-            div {
-                id = "megamenu-panel-one"
-                attributes["popover"] = ""
+            panelTrigger("Components", Megamenu.PanelOne())
+            daisyMegamenuPanel(id = Megamenu.PanelOne()) {
                 ul("menu w-full") {
                     li { a { +"Buttons" } }
                     li { a { +"Cards" } }
@@ -53,10 +55,8 @@ fun HTML.megamenuReferencePage() {
                 }
             }
 
-            button { attributes["popovertarget"] = "megamenu-panel-two"; +"Docs" }
-            div {
-                id = "megamenu-panel-two"
-                attributes["popover"] = ""
+            panelTrigger("Docs", Megamenu.PanelTwo())
+            daisyMegamenuPanel(id = Megamenu.PanelTwo()) {
                 ul("menu w-full") {
                     li { a { +"Getting started" } }
                     li { a { +"Codegen" } }
@@ -66,4 +66,13 @@ fun HTML.megamenuReferencePage() {
 
         p("mt-10 text-sm opacity-60") { +"end of page" }
     }
+}
+
+/**
+ * A megamenu's own triggers carry no DaisyUI class — `megamenu.md:19` shows a bare `<button>` —
+ * so this is plain `kotlinx.html` rather than `daisyButton`, which would add `btn`. Only the
+ * outer trigger that opens the whole megamenu is a `btn`.
+ */
+private fun FlowContent.panelTrigger(label: String, panel: HtmlId) {
+    button { attributes["popovertarget"] = panel.id; +label }
 }
